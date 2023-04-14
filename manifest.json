@@ -3,6 +3,7 @@
     "name": "__MSG_extensionName__",
     "description": "__MSG_extensionDescription__",
     "version": "0.1",
+    "incognito": "not_allowed",
     "author": "Scand",
     "homepage_url": "https://github.com/Scandltd/linky/",
     "default_locale": "en",
@@ -26,6 +27,7 @@
         }
     },
     "permissions": ["activeTab", "menus", "cookies", "contextualIdentities"],
+    "optional_permissions": ["bookmarks"],
     "browser_action": {
         "default_icon": {
             "48": "src/icons/icon-linky-48.svg",
