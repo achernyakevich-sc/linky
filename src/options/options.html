@@ -7,14 +7,27 @@
 </head>
 <body>
 
-<p class="title" data-locale="optionsPageInfoSectionTitle"></p>
-
 <div class="settings-container">
+    <p class="title" data-locale="optionsPageInfoSectionTitle"></p>
     <div class="shortcuts-info-block">
         <span class="icon icon-keyboard"
               data-locale="optionsPageKeyboardShortcutSubtitle"></span>
         <p data-locale="optionsPageKeyboardShortcutDescription"></p>
     </div>
+    <p><em data-locale="manageExtensionShortcuts"></em></p>
+
+    <hr/>
+
+    <p class="title" data-locale="optionsPageOptionalPermissionsTitle"></p>
+    <form>
+        <div class="settings-group">
+            <label class="permission">
+                <input type="checkbox" data-permission-id="bookmarks" id="bookmarksPermissions">
+                <span class="bold" data-locale="optionsPageEnableBookMarkMenusCheckboxTitle"></span>
+            </label>
+            <p><em data-locale="optionsPageEnableBookMarkMenusDescription"></em></p>
+        </div>
+    </form>
 </div>
 
 <script src="options.js"></script>

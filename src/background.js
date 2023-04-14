@@ -40,3 +40,7 @@ when extension icon was clicked.
 browser.browserAction.onClicked.addListener((tab, OnClickData) => {
     openCurrentTabInAvailableContainers(tab.url, tab.cookieStoreId);
 });
+
+/* TODO: Need to add creating the context menu item for Bookmarks menu.
+    And add eventListener on click
+*/

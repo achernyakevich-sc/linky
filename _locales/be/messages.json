@@ -30,5 +30,21 @@
     "shortcutsDescriptionInBrowserManageExtension": {
         "message": "Адкрыць у даступных кантэйнерах",
         "description": "Title for 'Open in all containers' shortcuts in browser manage extension shortcuts panel"
+    },
+    "manageExtensionShortcuts": {
+        "message": "Каб наладзіць камбінацыю клавіш для пашырэння Linky, вам неабходна перайсці ў раздзел «Кіраванне гарачымі клавішамі пашырэнняў»",
+        "description": "Informational message where you can configure shortcuts combinations for the browser extension"
+    },
+    "optionsPageOptionalPermissionsTitle": {
+        "message": "Апцыянальныя Дазволы:",
+        "description": "Title for 'Optional Permissions' section on Option page"
+    },
+    "optionsPageEnableBookMarkMenusCheckboxTitle": {
+        "message": "Даступна ў Меню Закладак",
+        "description": "Label for checkbox in 'Optional Permissions' section on Option page"
+    },
+    "optionsPageEnableBookMarkMenusDescription": {
+        "message": "Гэтая настройка дазваляе выкарыстоўваць пашырэнне Linky у кантэкстным меню закладак",
+        "description": "Description for 'Enable BookMark Menus' checkbox in 'Optional Permissions' section on Option page"
     }
 }

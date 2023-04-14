@@ -30,5 +30,21 @@
     "shortcutsDescriptionInBrowserManageExtension": {
         "message": "Open in available Containers",
         "description": "Title for 'Open in all containers' shortcuts in browser manage extension shortcuts panel"
+    },
+    "manageExtensionShortcuts": {
+        "message": "To configure the shortcuts combination for Linky add-on, you should go to 'Manage Extension Shortcuts' section",
+        "description": "Informational message where you can configure shortcuts combinations for the browser extension"
+    },
+    "optionsPageOptionalPermissionsTitle": {
+        "message": "Optional Permissions:",
+        "description": "Title for 'Optional Permissions' section on Option page"
+    },
+    "optionsPageEnableBookMarkMenusCheckboxTitle": {
+        "message": "Enable BookMark Menus",
+        "description": "Label for checkbox in 'Optional Permissions' section on Option page"
+    },
+    "optionsPageEnableBookMarkMenusDescription": {
+        "message": "This setting allows you to use Linky extension into Bookmarks context menu",
+        "description": "Description for 'Enable BookMark Menus' checkbox in 'Optional Permissions' section on Option page"
     }
 }
