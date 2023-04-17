@@ -26,7 +26,7 @@
             "description": "__MSG_shortcutsDescriptionInBrowserManageExtension__"
         }
     },
-    "permissions": ["activeTab", "menus", "cookies", "contextualIdentities"],
+    "permissions": ["activeTab", "menus", "cookies", "contextualIdentities","contextMenus"],
     "optional_permissions": ["bookmarks"],
     "browser_action": {
         "default_icon": {

@@ -11,6 +11,10 @@
         "message": "Откры&ть в доступных контейнерах",
         "description": "Label displayed in tab's Context Menu"
     },
+    "extensionContextMenuLinkinBookmarksMenu": {
+        "message": "Откры&ть в доступных контейнерах",
+        "description": "Label displayed in Bookmarks Context Menu"
+    },
     "optionsPageTitle": {
         "message": "Linky - Настройки",
         "description": "Title for Options page"
