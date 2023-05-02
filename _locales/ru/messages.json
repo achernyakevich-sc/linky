@@ -11,6 +11,10 @@
         "message": "Откры&ть в доступных контейнерах",
         "description": "Label displayed in tab's Context Menu"
     },
+    "extensionContextMenuLinkinBookmarksMenu": {
+        "message": "Откры&ть в доступных контейнерах",
+        "description": "Label displayed in Bookmarks Context Menu"
+    },
     "optionsPageTitle": {
         "message": "Linky - Настройки",
         "description": "Title for Options page"
@@ -30,5 +34,21 @@
     "shortcutsDescriptionInBrowserManageExtension": {
         "message": "Открыть в доступных контейнерах",
         "description": "Title for 'Open in all containers' shortcuts in browser manage extension shortcuts panel"
+    },
+    "manageExtensionShortcuts": {
+        "message": "Чтобы настроить комбинацию клавиш для расширения Linky, вам необходимо перейти в раздел «Управление горячими клавишами расширений»",
+        "description": "Informational message where you can configure shortcuts combinations for the browser extension"
+    },
+    "optionsPageOptionalPermissionsTitle": {
+        "message": "Опциональные Разрешения:",
+        "description": "Title for 'Optional Permissions' section on Option page"
+    },
+    "optionsPageEnableBookMarkMenusCheckboxTitle": {
+        "message": "Доступно в Меню Закладок",
+        "description": "Label for checkbox in 'Optional Permissions' section on Option page"
+    },
+    "optionsPageEnableBookMarkMenusDescription": {
+        "message": "Эта настройка позволяет использовать расширение Linky в контекстном меню закладок",
+        "description": "Description for 'Enable BookMark Menus' checkbox in 'Optional Permissions' section on Option page"
     }
 }

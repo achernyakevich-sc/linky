@@ -1,24 +1,72 @@
+html {
+    font-size: 16px;
+}
+
 body {
     color: #333333;
+    font-size: 0.9rem;
 }
 
 .settings-container {
-    margin: 0.5rem;
+    margin: 1.5rem 0.5rem;
     border: 1px solid #cccccc;
-    padding: 1rem;
+    padding: 0 1.5rem;
 }
 
 .icon {
     background-position: left center;
     background-repeat: no-repeat;
-    padding-left: 22px;
+    padding-left: 1.4rem;
 }
 
 .icon-keyboard {
     background-image: url('../icons/keyboard.png');
+    font-weight: 600;
 }
 
 .title {
-    font-size: 2rem;
-    font-weight: normal;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+hr {
+    margin-top: 2rem;
+    border-width: 0 0 1px 0;
+    border-bottom: 1px solid #e7e7e7;
+}
+
+label {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+}
+
+em {
+    font-size: 0.75rem;
+}
+
+label > span {
+    padding-inline-end: 0.25rem;
+}
+
+.settings-group {
+    margin-block-end: 1rem;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    padding-block-end: 1rem;
+}
+
+.settings-group p {
+    margin-inline-start: 1.5rem;
+    margin-block: 0.25rem 0.5rem;
+}
+
+input[type="checkbox"] {
+    margin-inline: 0 0.5rem;
+    margin-block: 1px auto;
+    inline-size: 1rem;
+    block-size: 1rem;
 }
