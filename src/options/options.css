@@ -22,3 +22,73 @@ body {
     font-size: 2rem;
     font-weight: normal;
 }
+.sidebar-link {
+    color: #0c0c0d;
+    text-decoration: none;
+}
+
+.sidebar-link.active {
+    color: blue;
+    text-decoration: underline;
+}
+
+.options-page {
+    font-family: "Segoe UI", "San Francisco", "Ubuntu", "Fira Sans", "Roboto", "Arial", "Helvetica", sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: #0c0c0d;
+    line-height: 1.5;
+    margin: 20px 40px;
+}
+
+.options-sidebar {
+    position: fixed;
+    font-size: 17px;
+    font-weight: 400;
+    text-align: end;
+    width: 20%;
+}
+
+.title-container {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 15px;
+    align-items: center;
+}
+
+.title-container .logo {
+    height: 64px;
+    width: 64px;
+    margin-inline-end: 5px;
+}
+
+.title-container .logo-title {
+    text-align: start;
+    font-size: 14px;
+    font-weight: 300;
+    color: #737373;
+    margin: auto;
+}
+
+.options-sidebar ul {
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-item {
+    list-style-type: none;
+    padding: 10px 15px;
+}
+
+.section-content {
+    display: none;
+}
+
+.section-content.active {
+    display: block;
+}
+
+.options-content {
+    margin-left: 20%;
+    padding-left: 30px;
+}
