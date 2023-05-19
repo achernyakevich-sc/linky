@@ -12,7 +12,8 @@
         "96": "src/icons/icon-linky-48.svg"
     },
     "options_ui": {
-        "page": "src/options/options.html"
+        "page": "src/options/options.html",
+        "open_in_tab": true
     },
     "background": {
         "scripts": ["src/background.js"]
