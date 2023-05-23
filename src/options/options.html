@@ -6,40 +6,50 @@
     <link rel="stylesheet" type="text/css" href="options.css">
 </head>
 <body>
-<div class="options-page">
-    <div class="options-sidebar">
-        <div class="title-container">
-            <img src="../icons/icon-linky-64.png" class="logo" alt="">
-            <span class="logo-title">Linky</span>
+    <div class="options-page">
+        <div class="header">
+            <div class="logo-container">
+                <img src="../icons/icon-linky-64.png" class="logo" alt="">
+                <span class="logo-title">Linky</span>
+            </div>
+            <div class="title-container">
+                <h1>Test Title</h1>
+                <hr>
+            </div>
         </div>
-        <ul>
-            <li class="sidebar-item">
-                <a href="" class="sidebar-link active">Settings</a>
-            </li>
-            <li class="sidebar-item">
-                <a href="" class="sidebar-link">Shortcuts</a>
-            </li>
-            <li class="sidebar-item">
-                <a href="" class="sidebar-link">About</a>
-            </li>
-        </ul>
-    </div>
-    <div class="options-content">
-        <div id="Settings" class="section-content active">
-            <h3>Settings</h3>
-            <p>Details for Settings</p>
-        </div>
-        <div id="Shortcuts" class="section-content">
-            <h3>Shortcuts</h3>
-            <p>Details for Shortcuts</p>
-        </div>
-        <div id="About" class="section-content">
-            <h3>About</h3>
-            <p>Details for About</p>
-        </div>
-    </div>
-</div>
 
-<script src="options.js"></script>
+        <div class="settings-wrapper">
+
+            <div class="tab">
+                <input type="radio" id="sections-tab" name="tab-group-1" checked>
+                <label for="sections-tab">Settings</label>
+
+                <div class="content">
+                    Settings details
+                </div>
+            </div>
+
+            <div class="tab">
+                <input type="radio" id="shortcuts-tab" name="tab-group-1">
+                <label for="shortcuts-tab">Shortcuts</label>
+
+                <div class="content">
+                    Shortcuts details
+                </div>
+            </div>
+
+            <div class="tab">
+                <input type="radio" id="about-tab" name="tab-group-1">
+                <label for="about-tab">About</label>
+
+                <div class="content">
+                    About details
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="options.js"></script>
 </body>
 </html>
