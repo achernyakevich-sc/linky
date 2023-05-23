@@ -11,14 +11,6 @@
         "message": "Ope&n in available Containers",
         "description": "Label displayed in tab's Context Menu"
     },
-    "optionsPageTitle": {
-        "message": "Linky - Options",
-        "description": "Title for Options page"
-    },
-    "optionsPageInfoSectionTitle": {
-        "message": "Info",
-        "description": "Title for Info section on Options page"
-    },
     "optionsPageKeyboardShortcutSubtitle": {
         "message": "Keyboard Shortcut",
         "description": "Subtitle for shortcuts section on Option page"
@@ -30,5 +22,17 @@
     "shortcutsDescriptionInBrowserManageExtension": {
         "message": "Open in available Containers",
         "description": "Title for 'Open in all containers' shortcuts in browser manage extension shortcuts panel"
+    },
+    "optionsPageSettingsSectionTitle": {
+        "message": "Settings",
+        "description": "Title for Settings section on Options page"
+    },
+    "optionsPageShortCutsSectionTitle": {
+        "message": "Shortcuts",
+        "description": "Title for Shortcuts section on Options page"
+    },
+    "optionsPageAboutSectionTitle": {
+        "message": "About",
+        "description": "Title for About section on Options page"
     }
 }
