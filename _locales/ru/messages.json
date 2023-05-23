@@ -28,8 +28,16 @@
         "description": "Subtitle for shortcuts section on Option page"
     },
     "optionsPageKeyboardShortcutDescription": {
-        "message": "Нажатие на иконку расширения: Ctrl+ALT+U",
+        "message": "Нажатие на иконку расширения:",
         "description": "Description for Keyboard shortcut on Option page"
+    },
+    "optionsPageKeyboardShortcutContentTitle": {
+        "message": "Клавиатурные сочетания",
+        "description": "Title for Shortcuts content block"
+    },
+    "optionsPageKeyboardShortcutContentDescription": {
+        "message": "Установить клавиатурные сочетания.",
+        "description": "Description for Shortcuts content block"
     },
     "shortcutsDescriptionInBrowserManageExtension": {
         "message": "Открыть в доступных контейнерах",

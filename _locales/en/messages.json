@@ -28,8 +28,16 @@
         "description": "Subtitle for shortcuts section on Option page"
     },
     "optionsPageKeyboardShortcutDescription": {
-        "message": "Click by extension icon: Ctrl+ALT+U",
+        "message": "Click by extension icon:",
         "description": "Description for Keyboard shortcut on Option page"
+    },
+    "optionsPageKeyboardShortcutContentTitle": {
+        "message": "Keyboard shortcuts",
+        "description": "Title for Shortcuts content block"
+    },
+    "optionsPageKeyboardShortcutContentDescription": {
+        "message": "Set keyboard shortcuts.",
+        "description": "Description for Shortcuts content block"
     },
     "shortcutsDescriptionInBrowserManageExtension": {
         "message": "Open in available Containers",

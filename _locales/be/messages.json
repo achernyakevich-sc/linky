@@ -28,8 +28,16 @@
         "description": "Subtitle for shortcuts section on Option page"
     },
     "optionsPageKeyboardShortcutDescription": {
-        "message": "Націск на абразок пашырэння: Ctrl+ALT+U",
+        "message": "Націск на абразок пашырэння:",
         "description": "Description for Keyboard shortcut on Option page"
+    },
+    "optionsPageKeyboardShortcutContentTitle": {
+        "message": "Клавіятурныя спалучэнні",
+        "description": "Title for Shortcuts content block"
+    },
+    "optionsPageKeyboardShortcutContentDescription": {
+        "message": "Усталяваць клавіятурныя спалучэнні.",
+        "description": "Description for Shortcuts content block"
     },
     "shortcutsDescriptionInBrowserManageExtension": {
         "message": "Адкрыць у даступных кантэйнерах",
