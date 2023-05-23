@@ -91,6 +91,7 @@
     float: left;
     clear: both;
     width: 20%;
+    min-width: 90px;
 }
 
 .tab label {
