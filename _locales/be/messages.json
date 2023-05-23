@@ -3,6 +3,18 @@
         "message": "Linky",
         "description": "Name of the extension"
     },
+    "authorName": {
+        "message": "Scand",
+        "description": "Developer company name"
+    },
+    "extensionLicenseName": {
+        "message": "GNU General Public License v2.0",
+        "description": "Name of the extension license"
+    },
+    "extensionVersionNumber": {
+        "message": "Версія 0.1",
+        "description": "Number of the extension version"
+    },
     "extensionDescription": {
         "message": "Linky - пашырэнне для Firefox, якое спрашчае прагляд вэб-старонак, выконваючы залішнія задачы ў некалькіх кантэйнерах",
         "description": "Description of the extension"
@@ -34,5 +46,17 @@
     "optionsPageAboutSectionTitle": {
         "message": "Апісанне",
         "description": "Title for About section on Options page"
+    },
+    "optionsPageAboutSectionAuthorSubsectionTitle": {
+        "message": "Аўтар",
+        "description": "Title for subsection Author into About section on Options page"
+    },
+    "optionsPageAboutSectionLicenseSubsectionTitle": {
+        "message": "Ліцэнзія",
+        "description": "Title for subsection License into About section on Options page"
+    },
+    "optionsPageAboutSectionFeedbackSubsectionTitle": {
+        "message": "Зваротная сувязь",
+        "description": "Title for subsection Feedback into About section on Options page"
     }
 }

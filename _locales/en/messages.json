@@ -3,6 +3,18 @@
         "message": "Linky",
         "description": "Name of the extension"
     },
+    "authorName": {
+        "message": "Scand",
+        "description": "Developer company name"
+    },
+    "extensionLicenseName": {
+        "message": "GNU General Public License v2.0",
+        "description": "Name of the extension license"
+    },
+    "extensionVersionNumber": {
+        "message": "Version 0.1",
+        "description": "Number of the extension version"
+    },
     "extensionDescription": {
         "message": "Linky - Firefox add-on that simplifies browsing performing redundant tasks in multiple containers",
         "description": "Description of the extension"
@@ -34,5 +46,17 @@
     "optionsPageAboutSectionTitle": {
         "message": "About",
         "description": "Title for About section on Options page"
+    },
+    "optionsPageAboutSectionAuthorSubsectionTitle": {
+        "message": "Author",
+        "description": "Title for subsection Author into About section on Options page"
+    },
+    "optionsPageAboutSectionLicenseSubsectionTitle": {
+        "message": "License",
+        "description": "Title for subsection License into About section on Options page"
+    },
+    "optionsPageAboutSectionFeedbackSubsectionTitle": {
+        "message": "Feedback",
+        "description": "Title for subsection Feedback into About section on Options page"
     }
 }

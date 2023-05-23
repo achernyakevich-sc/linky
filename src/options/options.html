@@ -22,31 +22,70 @@
 
             <div class="tab">
                 <input type="radio" id="sections-tab" name="tab-group-1" value="Settings" checked>
-                <label for="sections-tab" data-locale="optionsPageSettingsSectionTitle"></label>
+                <label for="sections-tab" class="menu-item" data-locale="optionsPageSettingsSectionTitle"></label>
 
-                <div class="content">
+                <ol class="content">
                     Settings details
-                </div>
+                </ol>
             </div>
 
             <div class="tab">
                 <input type="radio" id="shortcuts-tab" value="Shortcuts" name="tab-group-1">
-                <label for="shortcuts-tab" data-locale="optionsPageShortCutsSectionTitle"></label>
+                <label for="shortcuts-tab" class="menu-item" data-locale="optionsPageShortCutsSectionTitle"></label>
 
-                <div class="content">
+                <ol class="content">
                     Shortcuts details
-                </div>
+                </ol>
             </div>
 
             <div class="tab">
                 <input type="radio" id="about-tab" name="tab-group-1" value="About">
-                <label for="about-tab" data-locale="optionsPageAboutSectionTitle"></label>
+                <label for="about-tab" class="menu-item" data-locale="optionsPageAboutSectionTitle"></label>
 
-                <div class="content">
-                    About details
-                </div>
+                <ol class="content">
+                    <li class="option-container">
+                        <div class="option-element ">
+                            <div class="option-text">
+                                <label data-locale="extensionName"></label>
+                                <p class="caption">
+                                    <a href="https://github.com/Scandltd/linky/" data-locale="extensionVersionNumber" target="_blank"></a>
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="option-container">
+                        <div class="option-element ">
+                            <div class="option-text">
+                                <label data-locale="optionsPageAboutSectionAuthorSubsectionTitle"></label>
+                                <p class="caption">
+                                    <a href="https://scand.com" target="_blank" data-locale="authorName"></a>
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="option-container">
+                        <div class="option-element ">
+                            <div class="option-text">
+                                <label data-locale="optionsPageAboutSectionLicenseSubsectionTitle"></label>
+                                <p class="caption" data-locale="extensionLicenseName"></p>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="option-container">
+                        <div class="option-element ">
+                            <div class="option-text">
+                                <label data-locale="Feedback"></label>
+                                <p class="caption">
+                                    <a href="mailto:linky@scand.com">linky@scand.com</a>
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                </ol>
             </div>
-
         </div>
     </div>
 

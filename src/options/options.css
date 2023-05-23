@@ -8,6 +8,14 @@
 /*.icon-keyboard {*/
 /*    background-image: url('../icons/keyboard.png');*/
 /*}*/
+a {
+    color: #5595ff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
 
 .options-page {
     font-family: "Segoe UI", "San Francisco", "Ubuntu", "Fira Sans", "Roboto", "Arial", "Helvetica", sans-serif;
@@ -28,7 +36,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    padding: 10px 0px;
+    padding: 10px 0;
 }
 
 .logo-container .logo {
@@ -82,7 +90,7 @@
 
 .settings-wrapper {
     position: relative;
-    min-height: 200px;
+    min-height: 80vh;
     clear: both;
     margin: 25px 0;
 }
@@ -94,7 +102,7 @@
     min-width: 90px;
 }
 
-.tab label {
+.tab .menu-item {
     padding: 10px;
     font-size: 17px;
     text-align: right;
@@ -103,7 +111,7 @@
     display: inline-block;
 }
 
-.tab label:hover {
+.tab .menu-item:hover {
     cursor: pointer;
     text-decoration: underline;
     color: #5595ff;
@@ -120,21 +128,44 @@
     bottom: 0;
     left: calc(20% + 21px);
     background: white;
-    padding: 10px 20px;
+    padding: 0 20px;
     max-width: 650px;
     box-sizing: border-box;
+    list-style-type: none;
+    margin: 0;
 }
 
-[type=radio]:checked ~ label {
+[type=radio]:checked ~ .menu-item {
     color: #5595ff;
     z-index: 2;
 }
 
-[type=radio]:checked ~ label:hover {
+[type=radio]:checked ~ .menu-item:hover {
     cursor: default;
     text-decoration: none;
 }
 
-[type=radio]:checked ~ label ~ .content {
+[type=radio]:checked ~  .menu-item ~ .content {
     z-index: 1;
+}
+
+.option-container label {
+    color: #0c0c0d;
+}
+
+.option-container .caption {
+    font-size: 13px;
+    font-weight: 400;
+    margin: 0;
+}
+
+.option-container .option-element {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px 0;
+}
+
+.option-container .option-element .option-text {
+    flex: 1;
 }
