@@ -31,6 +31,10 @@
         "message": "Нажатие на иконку расширения:",
         "description": "Description for Keyboard shortcut on Option page"
     },
+    "optionsPageKeyboardShortcutContentDetailDescription": {
+        "message": "Открывает текущую активную вкладку во всех доступных контейнерах.",
+        "description": "Full description for Keyboard shortcut on Option page"
+    },
     "optionsPageKeyboardShortcutContentTitle": {
         "message": "Клавиатурные сочетания",
         "description": "Title for Shortcuts content block"

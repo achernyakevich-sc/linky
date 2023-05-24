@@ -231,6 +231,10 @@ input[type="text"]:hover {
     border-color: #5595ff;
 }
 
+.keyboard-shortcut input {
+    margin-right: 3px;
+}
+
 .keyboard-shortcut button {
     position: absolute;
     border: none;
@@ -242,7 +246,7 @@ input[type="text"]:hover {
 
 .keyboard-shortcut button.clear-button {
     inset-inline-end: 0;
-    margin: 3px;
+    margin: 3px 6px 3px 3px;
 }
 
 .keyboard-shortcut button.clear-button svg,
@@ -269,5 +273,4 @@ input[type="text"]:hover {
 
 .keyboard-shortcut button.reset-button {
     inset-inline-end: -20px;
-    margin: -3px;
 }

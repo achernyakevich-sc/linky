@@ -28,8 +28,12 @@
         "description": "Subtitle for shortcuts section on Option page"
     },
     "optionsPageKeyboardShortcutDescription": {
-        "message": "Click by extension icon:",
+        "message": "Clicking on the extension icon:",
         "description": "Description for Keyboard shortcut on Option page"
+    },
+    "optionsPageKeyboardShortcutContentDetailDescription": {
+        "message": "Opens the currently active tab in all available containers.",
+        "description": "Full description for Keyboard shortcut on Option page"
     },
     "optionsPageKeyboardShortcutContentTitle": {
         "message": "Keyboard shortcuts",

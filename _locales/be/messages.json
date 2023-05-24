@@ -31,6 +31,10 @@
         "message": "Націск на абразок пашырэння:",
         "description": "Description for Keyboard shortcut on Option page"
     },
+    "optionsPageKeyboardShortcutContentDetailDescription": {
+        "message": "Адкрывае актыўную ўкладку ва ўсіх даступных кантэйнерах.",
+        "description": "Full description for Keyboard shortcut on Option page"
+    },
     "optionsPageKeyboardShortcutContentTitle": {
         "message": "Клавіятурныя спалучэнні",
         "description": "Title for Shortcuts content block"
