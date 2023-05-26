@@ -21,8 +21,8 @@
     "commands": {
         "_execute_browser_action": {
             "suggested_key": {
-                "default": "Ctrl+Alt+U",
-                "mac": "MacCtrl+Alt+U"
+                "default": "Ctrl+Alt+L",
+                "mac": "MacCtrl+Alt+L"
             },
             "description": "__MSG_shortcutsDescriptionInBrowserManageExtension__"
         }
