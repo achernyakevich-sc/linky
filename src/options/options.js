@@ -94,8 +94,6 @@ shortcutResetBtnArray.forEach((item) => {
 // shortcuts setup
 inputsShortcutsArr.forEach((item) => {
     item.addEventListener("keydown", (e) => {
-        console.log("keydown e", e);
-        console.log("e.target", e.target);
         handleKeyDown(e)
     })
 })
@@ -137,7 +135,7 @@ function handleKeyDown(e) {
         return;
     }
     const normalizedKey = normalizeKey(e.key, e.keyCode);
-    let error = "";
+    let error = e.target.parentNode.nextElementSibling.innerText = "";
 
     const mediaKeys = /^(MediaPlayPause|MediaStop|MediaNextTrack|MediaPrevTrack)$/;
     const funcKeys = /^F([0-9]|1[0-2])$/;
@@ -165,7 +163,7 @@ function handleKeyDown(e) {
         browser.commands.update({ name: e.target.id, shortcut: value });
         browser.storage.local.set({storedShortCutsArr});
     } else {
-        console.log('INVALID SHORTCUTS');
+        e.target.parentNode.nextElementSibling.innerText = 'Invalid shortcuts';
     }
 }
 
