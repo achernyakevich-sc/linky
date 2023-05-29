@@ -23,25 +23,17 @@
         "message": "Ope&n in available Containers",
         "description": "Label displayed in tab's Context Menu"
     },
-    "optionsPageKeyboardShortcutSubtitle": {
-        "message": "Keyboard Shortcut",
-        "description": "Subtitle for shortcuts section on Option page"
-    },
-    "optionsPageKeyboardShortcutDescription": {
-        "message": "Clicking on the extension icon:",
-        "description": "Description for Keyboard shortcut on Option page"
+    "optionsPageKeyboardShortcutsSectionTitle": {
+        "message": "Keyboard Shortcuts",
+        "description": "Title for shortcuts section on Option page"
     },
     "optionsPageKeyboardShortcutContentDetailDescription": {
-        "message": "Opens the currently active tab in all available containers.",
+        "message": "Opens the currently active tab in all available containers",
         "description": "Full description for Keyboard shortcut on Option page"
     },
     "optionsPageKeyboardShortcutContentTitle": {
-        "message": "Keyboard shortcuts",
+        "message": "Set Keyboard shortcuts",
         "description": "Title for Shortcuts content block"
-    },
-    "optionsPageKeyboardShortcutContentDescription": {
-        "message": "Set keyboard shortcuts.",
-        "description": "Description for Shortcuts content block"
     },
     "shortcutsDescriptionInBrowserManageExtension": {
         "message": "Open in available Containers",

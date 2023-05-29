@@ -29,40 +29,23 @@
         </div>
 
         <div class="tab">
-          <input type="radio" id="shortcuts-tab" value="Shortcuts" name="tab-group-1">
+          <input type="radio" id="shortcuts-tab" value="Keyboard Shortcuts" name="tab-group-1">
           <label for="shortcuts-tab" class="menu-item" data-locale="optionsPageShortCutsSectionTitle"></label>
 
           <ol class="content">
             <li class="option-container">
-              <div class="option-element ">
-                <div class="option-text">
-                  <label data-locale="optionsPageKeyboardShortcutContentTitle"></label>
-                  <p class="caption" data-locale="optionsPageKeyboardShortcutContentDescription"></p>
-                </div>
-              </div>
               <fieldset>
                 <legend class="no-display-legend" data-locale="optionsPageKeyboardShortcutContentTitle"></legend>
                 <ul class="child-elements">
                   <li class="option-container">
                     <div class="option-element">
-                      <div class="option-text">
-                        <label for="_execute_browser_action" data-locale="optionsPageKeyboardShortcutDescription"></label>
-                        <p class="caption" data-locale="optionsPageKeyboardShortcutContentDetailDescription"></p>
-                      </div>
+                      <p class="caption" data-locale="optionsPageKeyboardShortcutContentDetailDescription"></p>
                       <div class="option-form">
                         <div class="keyboard-shortcut ">
                           <div class="row">
-                            <input type="text" id="_execute_browser_action" class="shortcuts-input" placeholder="Type a shortcut" style="ime-mode: disabled;" value="">
-                            <button class="clear-button" title="Clear">
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="480" height="480">
-                                <path d="M12 2a10 10 0 100 20 10 10 0 100-20zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"></path>
-                              </svg>
-                            </button>
-                            <button class="reset-button" title="Reset">
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="185.25 184.25 100 100">
-                                <path fill="none" stroke="#000" stroke-width="8.5" stroke-miterlimit="10" d="M200.88 236.19a34.28 34.28 0 0158.54-26.08l.97.98"></path><path d="M272.13 195.8l-27.1 26.95 27.02.07z"></path><path fill="none" stroke="#000" stroke-width="8.5" stroke-miterlimit="10" d="M269.3 232.31a34.28 34.28 0 01-58.54 26.08l-.98-.98"></path><path d="M198.05 272.7l27.09-26.95-27.01-.07z"></path>
-                              </svg>
-                            </button>
+                            <input type="text" id="_execute_browser_action" class="shortcuts-input" placeholder="Type a shortcut" value="">
+                            <button class="clear-button" title="Clear">Clear</button>
+                            <button class="reset-button" title="Reset">Reset</button>
                           </div>
                           <p class="error"></p>
                         </div>
