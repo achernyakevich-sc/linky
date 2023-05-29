@@ -154,7 +154,7 @@ function handleKeyDown(e) {
     }${e.altKey ? "Alt+" : ""}${e.shiftKey ? "Shift+" : ""}${normalizedKey}`;
 
     e.target.value = value || "";
-    const isValidShortcut = value != "" && error == "";
+    const isValidShortcut = error === "";
 
     if (isValidShortcut) {
         storedShortCutsArr.filter((el) => el.id === e.target.id);
