@@ -31,28 +31,36 @@ function onError(e) {
     console.error(e);
 }
 
+const gettingStoredSettings = browser.storage.local.get();
+gettingStoredSettings.then(checkStoredSettings, onError);
+
 /*
 On startup, check whether we have stored settings.
 If we don't, then store the default settings.
 */
-function checkStoredSettings(storedSettings) {
+async function checkStoredSettings(storedSettings) {
     if (!storedSettings.storedShortCutsArr) {
         browser.storage.local.set({storedShortCutsArr});
     }
-    setShortCutsOnLoadPage();
+    await setShortCutsOnLoadPage(storedSettings.storedShortCutsArr);
 }
 
-function setShortCutsOnLoadPage() {
+function setShortCutsOnLoadPage(storedSettingsArray) {
     inputsShortcutsArr.forEach((item) => {
-        let getShortcutElement = storedShortCutsArr.filter((el) => el.id === item.id);
-        let getDefaultShortCuts = defaultShortCutsArr.filter((el) => el.id === item.id)
-        getShortcutElement.length ? (item.value = getShortcutElement.shortcut) : (item.value = getDefaultShortCuts[0].shortcut);
-        browser.commands.update({ name: item.id, shortcut: getDefaultShortCuts[0].shortcut });
+        if (storedSettingsArray) {
+            let getShortcutElement = storedSettingsArray.filter((el) => el.id === item.id);
+            if (getShortcutElement.length) {
+                item.value = getShortcutElement[0].shortcut
+                browser.commands.update({ name: item.id, shortcut: getShortcutElement[0].shortcut });
+            }
+        } else {
+            let getDefaultShortCuts = defaultShortCutsArr.filter((el) => el.id === item.id)
+            browser.storage.local.set({storedShortCutsArr: defaultShortCutsArr});
+            item.value = getDefaultShortCuts[0].shortcut;
+            browser.commands.update({ name: item.id, shortcut: getDefaultShortCuts[0].shortcut });
+        }
     })
 }
-
-const gettingStoredSettings = browser.storage.local.get();
-gettingStoredSettings.then(checkStoredSettings, onError);
 
 radioButtons.forEach((item) => {
     item.addEventListener("click", () => {
@@ -74,6 +82,7 @@ shortcutClearBtnArray.forEach((item) => {
         storedShortCutsArr[0].shortcut = "";
         browser.commands.update({ name: "_execute_browser_action", shortcut: "" });
         browser.storage.local.set({storedShortCutsArr});
+        item.parentNode.nextElementSibling.innerText = "";
     });
 });
 
