@@ -3,7 +3,7 @@ document.querySelectorAll('[data-locale]').forEach((elem) => {
   i18nElement.innerText = browser.i18n.getMessage(i18nElement.dataset.locale);
 });
 
-const radioButtons = document.querySelectorAll('input[name="tab-group-1"]');
+const sidebarMenuTabs = document.querySelectorAll('input[name="tab-group-1"]');
 const optionsTitle = document.getElementById('options-title');
 const shortcutClearBtnArray = document.querySelectorAll('.clear-button');
 const shortcutResetBtnArray = document.querySelectorAll('.reset-button');
@@ -36,21 +36,21 @@ function setShortCutsOnLoadPage(storedSettingsArray) {
   inputsShortcutsArr.forEach((item) => {
     const shortcutInputElement = item;
     if (storedSettingsArray) {
-      const getShortcutElement = storedSettingsArray.filter((el) => el.id === item.id);
+      const getShortcutElement = storedSettingsArray.find((el) => el.id === shortcutInputElement.id);
       if (getShortcutElement.length) {
-        shortcutInputElement.value = getShortcutElement[0].shortcut;
+        shortcutInputElement.value = getShortcutElement.shortcut;
         browser.commands.update({
           name: shortcutInputElement.id,
-          shortcut: getShortcutElement[0].shortcut,
+          shortcut: getShortcutElement.shortcut,
         });
       }
     } else {
-      const getDefaultShortCuts = defaultShortCutsArr.filter((el) => el.id === item.id);
+      const getDefaultShortCuts = defaultShortCutsArr.find((el) => el.id === shortcutInputElement.id);
       browser.storage.local.set({ storedShortCutsArr: defaultShortCutsArr });
-      shortcutInputElement.value = getDefaultShortCuts[0].shortcut;
+      shortcutInputElement.value = getDefaultShortCuts.shortcut;
       browser.commands.update({
         name: shortcutInputElement.id,
-        shortcut: getDefaultShortCuts[0].shortcut,
+        shortcut: getDefaultShortCuts.shortcut,
       });
     }
   });
@@ -67,10 +67,9 @@ async function checkStoredSettings(storedSettings) {
   await setShortCutsOnLoadPage(storedSettings.storedShortCutsArr);
 }
 
-const gettingStoredSettings = browser.storage.local.get();
-gettingStoredSettings.then(checkStoredSettings, onError);
+browser.storage.local.get().then(checkStoredSettings, onError);
 
-radioButtons.forEach((item) => {
+sidebarMenuTabs.forEach((item) => {
   item.addEventListener('click', (e) => {
     if (e.target.checked) {
       optionsTitle.innerText = e.target.value;
@@ -84,7 +83,7 @@ shortcutClearBtnArray.forEach((item) => {
   shortcutClearBtnElement.addEventListener('click', () => {
     shortcutClearBtnElement.previousElementSibling.value = '';
     storedShortCutsArr.filter((el) => el.id === shortcutClearBtnElement.id);
-    storedShortCutsArr[0].id = item.previousElementSibling.id;
+    storedShortCutsArr[0].id = shortcutClearBtnElement.previousElementSibling.id;
     storedShortCutsArr[0].shortcut = '';
     browser.commands.update({ name: '_execute_browser_action', shortcut: '' });
     browser.storage.local.set({ storedShortCutsArr });
@@ -97,8 +96,8 @@ shortcutResetBtnArray.forEach((item) => {
   const shortcutResetBtnElement = item;
   shortcutResetBtnElement.addEventListener('click', () => {
     const currentInput = shortcutResetBtnElement.parentNode.firstChild.nextSibling;
-    const getDefaultShortCutsById = defaultShortCutsArr.filter((el) => el.id === currentInput.id);
-    currentInput.value = getDefaultShortCutsById[0].shortcut;
+    const getDefaultShortCutsById = defaultShortCutsArr.find((el) => el.id === currentInput.id);
+    currentInput.value = getDefaultShortCutsById.shortcut;
     storedShortCutsArr.filter((el) => el.id === currentInput.id);
     storedShortCutsArr[0].shortcut = currentInput.value;
     storedShortCutsArr[0].id = currentInput.id;
