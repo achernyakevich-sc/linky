@@ -18,13 +18,6 @@ const defaultShortCutsArr = [
   },
 ];
 
-const storedShortCutsArr = [
-  {
-    id: '',
-    shortcut: '',
-  },
-];
-
 /*
 Generic error logger.
 */
@@ -37,13 +30,11 @@ function setShortCutsOnLoadPage(storedSettingsArray) {
     const shortcutInputElement = item;
     if (storedSettingsArray) {
       const getShortcutElement = storedSettingsArray.find((el) => el.id === shortcutInputElement.id);
-      if (getShortcutElement.length) {
-        shortcutInputElement.value = getShortcutElement.shortcut;
-        browser.commands.update({
-          name: shortcutInputElement.id,
-          shortcut: getShortcutElement.shortcut,
-        });
-      }
+      shortcutInputElement.value = getShortcutElement.shortcut;
+      browser.commands.update({
+        name: shortcutInputElement.id,
+        shortcut: getShortcutElement.shortcut,
+      });
     } else {
       const getDefaultShortCuts = defaultShortCutsArr.find((el) => el.id === shortcutInputElement.id);
       browser.storage.local.set({ storedShortCutsArr: defaultShortCutsArr });
@@ -62,7 +53,7 @@ If we don't, then store the default settings.
 */
 async function checkStoredSettings(storedSettings) {
   if (!storedSettings.storedShortCutsArr) {
-    browser.storage.local.set({ storedShortCutsArr });
+    browser.storage.local.set({ storedShortCutsArr: storedSettings.storedShortCutsArr });
   }
   await setShortCutsOnLoadPage(storedSettings.storedShortCutsArr);
 }
@@ -81,12 +72,10 @@ sidebarMenuTabs.forEach((item) => {
 shortcutClearBtnArray.forEach((item) => {
   const shortcutClearBtnElement = item;
   shortcutClearBtnElement.addEventListener('click', () => {
-    shortcutClearBtnElement.previousElementSibling.value = '';
-    storedShortCutsArr.filter((el) => el.id === shortcutClearBtnElement.id);
-    storedShortCutsArr[0].id = shortcutClearBtnElement.previousElementSibling.id;
-    storedShortCutsArr[0].shortcut = '';
-    browser.commands.update({ name: '_execute_browser_action', shortcut: '' });
-    browser.storage.local.set({ storedShortCutsArr });
+    const currentInput = shortcutClearBtnElement.previousElementSibling;
+    currentInput.value = '';
+    browser.commands.update({ name: currentInput.id, shortcut: '' });
+    browser.storage.local.set({ storedShortCutsArr: [{ id: currentInput.id, shortcut: '' }] });
     shortcutClearBtnElement.parentNode.nextElementSibling.innerText = '';
   });
 });
@@ -98,11 +87,9 @@ shortcutResetBtnArray.forEach((item) => {
     const currentInput = shortcutResetBtnElement.parentNode.firstChild.nextSibling;
     const getDefaultShortCutsById = defaultShortCutsArr.find((el) => el.id === currentInput.id);
     currentInput.value = getDefaultShortCutsById.shortcut;
-    storedShortCutsArr.filter((el) => el.id === currentInput.id);
-    storedShortCutsArr[0].shortcut = currentInput.value;
-    storedShortCutsArr[0].id = currentInput.id;
-    browser.commands.update({ name: '_execute_browser_action', shortcut: currentInput.value });
-    browser.storage.local.set({ storedShortCutsArr });
+    browser.commands.update({ name: currentInput.id, shortcut: currentInput.value });
+    browser.storage.local.set({ storedShortCutsArr: [{ id: currentInput.id, shortcut: currentInput.value }] });
+    shortcutResetBtnElement.parentNode.nextElementSibling.innerText = '';
   });
 });
 
@@ -186,11 +173,8 @@ function handleKeyDown(e) {
   const isValidShortcut = error === '';
 
   if (isValidShortcut) {
-    storedShortCutsArr.filter((el) => el.id === e.target.id);
-    storedShortCutsArr[0].shortcut = e.target.value;
-    storedShortCutsArr[0].id = e.target.id;
     browser.commands.update({ name: e.target.id, shortcut: value });
-    browser.storage.local.set({ storedShortCutsArr });
+    browser.storage.local.set({ storedShortCutsArr: [{ id: e.target.id, shortcut: value }] });
   } else {
     e.target.parentNode.nextElementSibling.innerText = 'Invalid shortcuts';
   }
