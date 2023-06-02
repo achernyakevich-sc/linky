@@ -25,11 +25,11 @@ function onError(e) {
   console.error(e);
 }
 
-function setShortCutsOnLoadPage(storedSettingsArray) {
+function setShortCutsOnLoadPage(settings) {
   inputsShortcutsArr.forEach((item) => {
     const shortcutInputElement = item;
-    if (storedSettingsArray) {
-      const getShortcutElement = storedSettingsArray.find((el) => el.id === shortcutInputElement.id);
+    if (settings.storedShortCutsArr) {
+      const getShortcutElement = settings.storedShortCutsArr.find((el) => el.id === shortcutInputElement.id);
       shortcutInputElement.value = getShortcutElement.shortcut;
       browser.commands.update({
         name: shortcutInputElement.id,
@@ -53,9 +53,12 @@ If we don't, then store the default settings.
 */
 async function checkStoredSettings(storedSettings) {
   if (!storedSettings.storedShortCutsArr) {
-    browser.storage.local.set({ storedShortCutsArr: storedSettings.storedShortCutsArr });
+    browser.storage.local.set({ storedShortCutsArr: defaultShortCutsArr });
   }
-  await setShortCutsOnLoadPage(storedSettings.storedShortCutsArr);
+
+  const settings = await browser.storage.local.get('storedShortCutsArr');
+
+  await setShortCutsOnLoadPage(settings);
 }
 
 browser.storage.local.get().then(checkStoredSettings, onError);
