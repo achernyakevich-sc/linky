@@ -152,18 +152,17 @@ function handleKeyDown(e) {
   const normalizedKey = normalizeKey(e.key, e.keyCode);
   const errorElement = document.getElementById(`${e.target.id}_error`);
   errorElement.innerText = '';
-  let error = '';
   const mediaKeys = /^(MediaPlayPause|MediaStop|MediaNextTrack|MediaPrevTrack)$/;
   const funcKeys = /^F([0-9]|1[0-2])$/;
   const modifierKeys = /^(Control|Alt|Shift|Meta)$/;
 
-  if (mediaKeys.test(normalizedKey) || funcKeys.test(normalizedKey)) error = '';
-  else if (modifierKeys.test(e.key)) error = 'typeLetterMessage';
+  if (mediaKeys.test(normalizedKey) || funcKeys.test(normalizedKey)) errorElement.innerText = '';
+  else if (modifierKeys.test(e.key)) errorElement.innerText = browser.i18n.getMessage('typeLetterMessage');
   else if (!e.ctrlKey && !e.altKey && !e.metaKey) {
-    error = isMac
-      ? 'includeMacModifierKeysMessage'
-      : 'includeModifierKeysMessage';
-  } else if (normalizedKey === '') error = 'invalidLetterMessage';
+    errorElement.innerText = isMac
+      ? errorElement.innerText = browser.i18n.getMessage('includeMacModifierKeysMessage')
+      : errorElement.innerText = browser.i18n.getMessage('includeModifierKeysMessage');
+  } else if (normalizedKey === '') errorElement.innerText = browser.i18n.getMessage('invalidLetterMessage');
 
   const ctrlKeyMac = isMac ? 'MacCtrl+' : 'Ctrl+';
   const ctrlKey = e.ctrlKey ? ctrlKeyMac : '';
@@ -173,13 +172,11 @@ function handleKeyDown(e) {
   const value = `${ctrlKey}${metaKey}${altKey}${shiftKey}${normalizedKey}`;
 
   e.target.value = value || '';
-  const isValidShortcut = error === '';
+  const isValidShortcut = errorElement.innerText === '';
 
   if (isValidShortcut) {
     browser.commands.update({ name: e.target.id, shortcut: value });
     browser.storage.local.set({ storedShortCutsArr: [{ id: e.target.id, shortcut: value }] });
-  } else {
-    errorElement.innerText = 'Invalid shortcuts';
   }
 }
 
