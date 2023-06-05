@@ -174,7 +174,10 @@ function handleKeyDown(e) {
 
   const ctrlKeyMac = isMac ? 'MacCtrl+' : 'Ctrl+';
   const ctrlKey = e.ctrlKey ? ctrlKeyMac : '';
-  const value = `${ctrlKey}${e.metaKey && isMac ? 'Command+' : ''}${e.altKey ? 'Alt+' : ''}${e.shiftKey ? 'Shift+' : ''}${normalizedKey}`;
+  const metaKey = e.metaKey && isMac ? 'Command+' : '';
+  const altKey = e.altKey ? 'Alt+' : '';
+  const shiftKey = e.shiftKey ? 'Shift+' : '';
+  const value = `${ctrlKey}${metaKey}${altKey}${shiftKey}${normalizedKey}`;
 
   e.target.value = value || '';
   const isValidShortcut = error === '';
