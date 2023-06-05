@@ -73,24 +73,28 @@ sidebarMenuTabs.forEach((item) => {
 
 // Clear button handler
 shortcutClearBtnArray.forEach((item) => {
+  const currentId = item.id.replace('_clear_btn', '');
+  const currentInput = document.getElementById(currentId);
+  const currentError = document.getElementById(`${currentId}_error`);
   item.addEventListener('click', () => {
-    const currentInput = item.previousElementSibling;
     currentInput.value = '';
-    browser.commands.update({ name: currentInput.id, shortcut: '' });
-    browser.storage.local.set({ storedShortCutsArr: [{ id: currentInput.id, shortcut: '' }] });
-    item.parentNode.nextElementSibling.innerText = '';
+    browser.commands.update({ name: currentId, shortcut: '' });
+    browser.storage.local.set({ storedShortCutsArr: [{ id: currentId, shortcut: '' }] });
+    currentError.innerText = '';
   });
 });
 
 // Reset button handler
 shortcutResetBtnArray.forEach((item) => {
   item.addEventListener('click', () => {
-    const currentInput = item.parentNode.firstChild.nextSibling;
-    const getDefaultShortCutsById = defaultShortCutsArr.find((el) => el.id === currentInput.id);
+    const currentId = item.id.replace('_reset_btn', '');
+    const currentInput = document.getElementById(currentId);
+    const currentError = document.getElementById(`${currentId}_error`);
+    const getDefaultShortCutsById = defaultShortCutsArr.find((el) => el.id === currentId);
     currentInput.value = getDefaultShortCutsById.shortcut;
-    browser.commands.update({ name: currentInput.id, shortcut: currentInput.value });
-    browser.storage.local.set({ storedShortCutsArr: [{ id: currentInput.id, shortcut: currentInput.value }] });
-    item.parentNode.nextElementSibling.innerText = '';
+    browser.commands.update({ name: currentId, shortcut: currentInput.value });
+    browser.storage.local.set({ storedShortCutsArr: [{ id: currentId, shortcut: currentInput.value }] });
+    currentError.innerText = '';
   });
 });
 
@@ -153,7 +157,9 @@ function handleKeyDown(e) {
     return;
   }
   const normalizedKey = normalizeKey(e.key, e.keyCode);
-  let error = e.target.parentNode.nextElementSibling.innerText = '';
+  const errorElement = document.getElementById(`${e.target.id}_error`);
+  errorElement.innerText = '';
+  let error = '';
   const mediaKeys = /^(MediaPlayPause|MediaStop|MediaNextTrack|MediaPrevTrack)$/;
   const funcKeys = /^F([0-9]|1[0-2])$/;
   const modifierKeys = /^(Control|Alt|Shift|Meta)$/;
@@ -177,7 +183,7 @@ function handleKeyDown(e) {
     browser.commands.update({ name: e.target.id, shortcut: value });
     browser.storage.local.set({ storedShortCutsArr: [{ id: e.target.id, shortcut: value }] });
   } else {
-    e.target.parentNode.nextElementSibling.innerText = 'Invalid shortcuts';
+    errorElement.innerText = 'Invalid shortcuts';
   }
 }
 
