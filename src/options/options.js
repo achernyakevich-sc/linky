@@ -73,26 +73,24 @@ sidebarMenuTabs.forEach((item) => {
 
 // Clear button handler
 shortcutClearBtnArray.forEach((item) => {
-  const shortcutClearBtnElement = item;
-  shortcutClearBtnElement.addEventListener('click', () => {
-    const currentInput = shortcutClearBtnElement.previousElementSibling;
+  item.addEventListener('click', () => {
+    const currentInput = item.previousElementSibling;
     currentInput.value = '';
     browser.commands.update({ name: currentInput.id, shortcut: '' });
     browser.storage.local.set({ storedShortCutsArr: [{ id: currentInput.id, shortcut: '' }] });
-    shortcutClearBtnElement.parentNode.nextElementSibling.innerText = '';
+    item.parentNode.nextElementSibling.innerText = '';
   });
 });
 
 // Reset button handler
 shortcutResetBtnArray.forEach((item) => {
-  const shortcutResetBtnElement = item;
-  shortcutResetBtnElement.addEventListener('click', () => {
-    const currentInput = shortcutResetBtnElement.parentNode.firstChild.nextSibling;
+  item.addEventListener('click', () => {
+    const currentInput = item.parentNode.firstChild.nextSibling;
     const getDefaultShortCutsById = defaultShortCutsArr.find((el) => el.id === currentInput.id);
     currentInput.value = getDefaultShortCutsById.shortcut;
     browser.commands.update({ name: currentInput.id, shortcut: currentInput.value });
     browser.storage.local.set({ storedShortCutsArr: [{ id: currentInput.id, shortcut: currentInput.value }] });
-    shortcutResetBtnElement.parentNode.nextElementSibling.innerText = '';
+    item.parentNode.nextElementSibling.innerText = '';
   });
 });
 
