@@ -26,25 +26,18 @@ function onError(e) {
 }
 
 function setShortCutsOnLoadPage(settings) {
-  inputsShortcutsArr.forEach((item) => {
-    const shortcutInputElement = item;
-    if (settings.storedShortCutsArr) {
-      const getShortcutElement = settings.storedShortCutsArr.find((el) => el.id === shortcutInputElement.id);
-      shortcutInputElement.value = getShortcutElement.shortcut;
+  if (settings) {
+    inputsShortcutsArr.forEach((item) => {
+      const getShortcutElement = settings.storedShortCutsArr.find((el) => el.id === item.id);
+      item.value = getShortcutElement.shortcut;
       browser.commands.update({
-        name: shortcutInputElement.id,
+        name: item.id,
         shortcut: getShortcutElement.shortcut,
       });
-    } else {
-      const getDefaultShortCuts = defaultShortCutsArr.find((el) => el.id === shortcutInputElement.id);
-      browser.storage.local.set({ storedShortCutsArr: defaultShortCutsArr });
-      shortcutInputElement.value = getDefaultShortCuts.shortcut;
-      browser.commands.update({
-        name: shortcutInputElement.id,
-        shortcut: getDefaultShortCuts.shortcut,
-      });
-    }
-  });
+    });
+  } else {
+    throw onError;
+  }
 }
 
 /*
