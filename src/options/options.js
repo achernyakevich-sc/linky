@@ -143,12 +143,12 @@ const normalizeKey = (key, keyCode) => {
   return '';
 };
 
-function handleKeyDown(e) {
-  if (e.repeat) return;
-  if (e.key === 'Tab') {
-    window.document.activeElement.blur();
-    return;
-  }
+function setShortcutsToStorageAndBrowserCommands(event, value) {
+  browser.commands.update({ name: event.target.id, shortcut: value });
+  browser.storage.local.set({ storedShortCutsArr: [{ id: event.target.id, shortcut: value }] });
+}
+
+function showErrorMessage(e, value) {
   const normalizedKey = normalizeKey(e.key, e.keyCode);
   const errorElement = document.getElementById(`${e.target.id}_error`);
   errorElement.innerText = '';
@@ -163,20 +163,33 @@ function handleKeyDown(e) {
       ? errorElement.innerText = browser.i18n.getMessage('includeMacModifierKeysMessage')
       : errorElement.innerText = browser.i18n.getMessage('includeModifierKeysMessage');
   } else if (normalizedKey === '') errorElement.innerText = browser.i18n.getMessage('invalidLetterMessage');
+  e.target.value = value || '';
+}
 
+function displayingInputValue(e) {
+  const normalizedKey = normalizeKey(e.key, e.keyCode);
   const ctrlKeyMac = isMac ? 'MacCtrl+' : 'Ctrl+';
   const ctrlKey = e.ctrlKey ? ctrlKeyMac : '';
   const metaKey = e.metaKey && isMac ? 'Command+' : '';
   const altKey = e.altKey ? 'Alt+' : '';
   const shiftKey = e.shiftKey ? 'Shift+' : '';
   const value = `${ctrlKey}${metaKey}${altKey}${shiftKey}${normalizedKey}`;
+  return value;
+}
 
-  e.target.value = value || '';
+function handleKeyDown(e) {
+  if (e.repeat) return;
+  if (e.key === 'Tab') {
+    window.document.activeElement.blur();
+    return;
+  }
+  const errorElement = document.getElementById(`${e.target.id}_error`);
   const isValidShortcut = errorElement.innerText === '';
 
+  const value = displayingInputValue(e);
+  showErrorMessage(e, value);
   if (isValidShortcut) {
-    browser.commands.update({ name: e.target.id, shortcut: value });
-    browser.storage.local.set({ storedShortCutsArr: [{ id: e.target.id, shortcut: value }] });
+    setShortcutsToStorageAndBrowserCommands(e, value);
   }
 }
 
