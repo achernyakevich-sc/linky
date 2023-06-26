@@ -116,12 +116,12 @@ const isMac = getOS() === 'Mac OS';
 
 const normalizeKey = (key, keyCode) => {
   const alphabet = /^([a-z]|[A-Z])$/;
-  if (alphabet.test(key)) return key.toUpperCase();
-
   const digit = /^[0-9]$/;
   const func = /^F([0-9]|1[0-2])$/;
+  if (alphabet.test(key) || digit.test(key) || func.test(key)) return key.toUpperCase();
+
   const homes = /^(Home|End|PageUp|PageDown|Insert|Delete)$/;
-  if (digit.test(key) || func.test(key) || homes.test(key)) return key;
+  if (homes.test(key)) return key;
 
   const space = /^\s$/;
   if (space.test(key)) return 'Space';
