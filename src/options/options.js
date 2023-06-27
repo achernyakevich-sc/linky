@@ -25,6 +25,11 @@ function onError(e) {
   console.error(e);
 }
 
+function setShortcutsToStorageAndBrowserCommands(event, value) {
+  browser.commands.update({ name: event, shortcut: value });
+  browser.storage.local.set({ storedShortCutsArr: [{ id: event, shortcut: value }] });
+}
+
 function setShortCutsOnLoadPage(settings) {
   if (settings) {
     inputsShortcutsArr.forEach((item) => {
@@ -71,8 +76,7 @@ shortcutClearBtnArray.forEach((item) => {
   const currentError = document.getElementById(`${currentId}_error`);
   item.addEventListener('click', () => {
     currentInput.value = '';
-    browser.commands.update({ name: currentId, shortcut: '' });
-    browser.storage.local.set({ storedShortCutsArr: [{ id: currentId, shortcut: '' }] });
+    setShortcutsToStorageAndBrowserCommands(currentId, '');
     currentError.innerText = '';
   });
 });
@@ -85,8 +89,7 @@ shortcutResetBtnArray.forEach((item) => {
     const currentError = document.getElementById(`${currentId}_error`);
     const getDefaultShortCutsById = defaultShortCutsArr.find((el) => el.id === currentId);
     currentInput.value = getDefaultShortCutsById.shortcut;
-    browser.commands.update({ name: currentId, shortcut: currentInput.value });
-    browser.storage.local.set({ storedShortCutsArr: [{ id: currentId, shortcut: currentInput.value }] });
+    setShortcutsToStorageAndBrowserCommands(currentId, currentInput.value);
     currentError.innerText = '';
   });
 });
@@ -143,12 +146,12 @@ const normalizeKey = (key, keyCode) => {
   return '';
 };
 
-function setShortcutsToStorageAndBrowserCommands(event, value) {
-  browser.commands.update({ name: event.target.id, shortcut: value });
-  browser.storage.local.set({ storedShortCutsArr: [{ id: event.target.id, shortcut: value }] });
-}
-
-function showErrorMessage(e, value) {
+function handleKeyDown(e) {
+  if (e.repeat) return;
+  if (e.key === 'Tab') {
+    window.document.activeElement.blur();
+    return;
+  }
   const normalizedKey = normalizeKey(e.key, e.keyCode);
   const errorElement = document.getElementById(`${e.target.id}_error`);
   errorElement.innerText = '';
@@ -163,33 +166,19 @@ function showErrorMessage(e, value) {
       ? errorElement.innerText = browser.i18n.getMessage('includeMacModifierKeysMessage')
       : errorElement.innerText = browser.i18n.getMessage('includeModifierKeysMessage');
   } else if (normalizedKey === '') errorElement.innerText = browser.i18n.getMessage('invalidLetterMessage');
-  e.target.value = value || '';
-}
 
-function displayingInputValue(e) {
-  const normalizedKey = normalizeKey(e.key, e.keyCode);
   const ctrlKeyMac = isMac ? 'MacCtrl+' : 'Ctrl+';
   const ctrlKey = e.ctrlKey ? ctrlKeyMac : '';
   const metaKey = e.metaKey && isMac ? 'Command+' : '';
   const altKey = e.altKey ? 'Alt+' : '';
   const shiftKey = e.shiftKey ? 'Shift+' : '';
   const value = `${ctrlKey}${metaKey}${altKey}${shiftKey}${normalizedKey}`;
-  return value;
-}
 
-function handleKeyDown(e) {
-  if (e.repeat) return;
-  if (e.key === 'Tab') {
-    window.document.activeElement.blur();
-    return;
-  }
-  const errorElement = document.getElementById(`${e.target.id}_error`);
+  e.target.value = value || '';
   const isValidShortcut = errorElement.innerText === '';
 
-  const value = displayingInputValue(e);
-  showErrorMessage(e, value);
   if (isValidShortcut) {
-    setShortcutsToStorageAndBrowserCommands(e, value);
+    setShortcutsToStorageAndBrowserCommands(e.target.id, value);
   }
 }
 
