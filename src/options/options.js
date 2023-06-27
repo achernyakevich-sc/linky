@@ -146,12 +146,7 @@ const normalizeKey = (key, keyCode) => {
   return '';
 };
 
-function handleKeyDown(e) {
-  if (e.repeat) return;
-  if (e.key === 'Tab') {
-    window.document.activeElement.blur();
-    return;
-  }
+function showErrorMessage(e) {
   const normalizedKey = normalizeKey(e.key, e.keyCode);
   const errorElement = document.getElementById(`${e.target.id}_error`);
   errorElement.innerText = '';
@@ -166,7 +161,18 @@ function handleKeyDown(e) {
       ? errorElement.innerText = browser.i18n.getMessage('includeMacModifierKeysMessage')
       : errorElement.innerText = browser.i18n.getMessage('includeModifierKeysMessage');
   } else if (normalizedKey === '') errorElement.innerText = browser.i18n.getMessage('invalidLetterMessage');
+}
 
+function handleKeyDown(e) {
+  if (e.repeat) return;
+  if (e.key === 'Tab') {
+    window.document.activeElement.blur();
+    return;
+  }
+
+  showErrorMessage(e);
+
+  const normalizedKey = normalizeKey(e.key, e.keyCode);
   const ctrlKeyMac = isMac ? 'MacCtrl+' : 'Ctrl+';
   const ctrlKey = e.ctrlKey ? ctrlKeyMac : '';
   const metaKey = e.metaKey && isMac ? 'Command+' : '';
@@ -175,6 +181,7 @@ function handleKeyDown(e) {
   const value = `${ctrlKey}${metaKey}${altKey}${shiftKey}${normalizedKey}`;
 
   e.target.value = value || '';
+  const errorElement = document.getElementById(`${e.target.id}_error`);
   const isValidShortcut = errorElement.innerText === '';
 
   if (isValidShortcut) {
