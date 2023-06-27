@@ -174,6 +174,12 @@ function displayingInputValue(e) {
   return value;
 }
 
+function checkAlreadyReservedCombination(value) {
+  const reservedArray = ['Ctrl+Q', 'Ctrl+Z', 'Ctrl+X', 'Ctrl+D', 'Ctrl+C', 'Ctrl+V'];
+  const isReserved = reservedArray.find((element) => (element === value)).length;
+  return isReserved;
+}
+
 function handleKeyDown(e) {
   if (e.repeat) return;
   if (e.key === 'Tab') {
@@ -184,9 +190,14 @@ function handleKeyDown(e) {
   showErrorMessage(e);
 
   const value = displayingInputValue(e);
+  const errorElement = document.getElementById(`${e.target.id}_error`);
+
+  if (checkAlreadyReservedCombination(value)) {
+    errorElement.innerText = browser.i18n.getMessage('invalidAlreadyReserved');
+  }
 
   e.target.value = value || '';
-  const errorElement = document.getElementById(`${e.target.id}_error`);
+
   const isValidShortcut = errorElement.innerText === '';
 
   if (isValidShortcut) {

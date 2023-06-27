@@ -78,5 +78,9 @@
     "invalidLetterMessage": {
         "message": "The letter can not be used",
         "description": "Error message that displays if you try to insert the letter that can not be used"
+    },
+    "invalidAlreadyReserved": {
+        "message": "The combination has already reserved",
+        "description": "Error message that displays if you try to insert the short cuts combination that has already reserved"
     }
 }
