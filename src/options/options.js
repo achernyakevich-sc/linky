@@ -163,6 +163,17 @@ function showErrorMessage(e) {
   } else if (normalizedKey === '') errorElement.innerText = browser.i18n.getMessage('invalidLetterMessage');
 }
 
+function displayingInputValue(e) {
+  const normalizedKey = normalizeKey(e.key, e.keyCode);
+  const ctrlKeyMac = isMac ? 'MacCtrl+' : 'Ctrl+';
+  const ctrlKey = e.ctrlKey ? ctrlKeyMac : '';
+  const metaKey = e.metaKey && isMac ? 'Command+' : '';
+  const altKey = e.altKey ? 'Alt+' : '';
+  const shiftKey = e.shiftKey ? 'Shift+' : '';
+  const value = `${ctrlKey}${metaKey}${altKey}${shiftKey}${normalizedKey}`;
+  return value;
+}
+
 function handleKeyDown(e) {
   if (e.repeat) return;
   if (e.key === 'Tab') {
@@ -172,13 +183,7 @@ function handleKeyDown(e) {
 
   showErrorMessage(e);
 
-  const normalizedKey = normalizeKey(e.key, e.keyCode);
-  const ctrlKeyMac = isMac ? 'MacCtrl+' : 'Ctrl+';
-  const ctrlKey = e.ctrlKey ? ctrlKeyMac : '';
-  const metaKey = e.metaKey && isMac ? 'Command+' : '';
-  const altKey = e.altKey ? 'Alt+' : '';
-  const shiftKey = e.shiftKey ? 'Shift+' : '';
-  const value = `${ctrlKey}${metaKey}${altKey}${shiftKey}${normalizedKey}`;
+  const value = displayingInputValue(e);
 
   e.target.value = value || '';
   const errorElement = document.getElementById(`${e.target.id}_error`);
