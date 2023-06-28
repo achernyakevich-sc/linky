@@ -83,11 +83,11 @@ shortcutClearBtnArray.forEach((item) => {
 
 // Reset button handler
 shortcutResetBtnArray.forEach((item) => {
+  const currentId = item.id.replace('_reset_btn', '');
+  const currentInput = document.getElementById(currentId);
+  const currentError = document.getElementById(`${currentId}_error`);
+  const getDefaultShortCutsById = defaultShortCutsArr.find((el) => el.id === currentId);
   item.addEventListener('click', () => {
-    const currentId = item.id.replace('_reset_btn', '');
-    const currentInput = document.getElementById(currentId);
-    const currentError = document.getElementById(`${currentId}_error`);
-    const getDefaultShortCutsById = defaultShortCutsArr.find((el) => el.id === currentId);
     currentInput.value = getDefaultShortCutsById.shortcut;
     setShortcutsToStorageAndBrowserCommands(currentId, currentInput.value);
     currentError.innerText = '';
