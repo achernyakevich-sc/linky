@@ -41,7 +41,7 @@ function setShortCutsOnLoadPage(settings) {
       });
     });
   } else {
-    throw onError;
+    onError();
   }
 }
 
