@@ -176,8 +176,11 @@ function displayingInputValue(e) {
 
 function checkAlreadyReservedCombination(value) {
   const reservedArray = ['Ctrl+Q', 'Ctrl+Z', 'Ctrl+X', 'Ctrl+D', 'Ctrl+C', 'Ctrl+V'];
-  const isReserved = reservedArray.find((element) => (element === value)).length;
-  return isReserved;
+  const reservedEl = reservedArray.find((element) => (element === value));
+  if (reservedEl && reservedEl.length) {
+    return true;
+  }
+  return false;
 }
 
 function handleKeyDown(e) {
