@@ -4,7 +4,7 @@
     <title data-locale="optionsPageTitle"></title>
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="options.css">
-</head>
+  </head>
   <body>
     <div class="options-page">
       <div class="header">
@@ -24,7 +24,45 @@
           <label for="sections-tab" class="menu-item" data-locale="optionsPageSettingsSectionTitle"></label>
 
           <ol class="content">
-            Settings details
+            <li class="settings-container">
+              <fieldset>
+                <legend class="no-display-legend">Container Tabs Opening Control</legend>
+                <ul class="child-elements">
+                  <li class="settings-container">
+                    <div class="settings-element">
+                      <p class="caption">Open new containers by groups of</p>
+                      <div class="settings-form">
+                        <input type="number" min="1" step="1" id="number-containers-in-group" class="settings-input" placeholder="Containers by groups" value="3">
+                        <p class="error" id="number-containers-in-group-error"></p>
+                      </div>
+                      <p class="caption">container(s).</p>
+                    </div>
+                  </li>
+
+                  <li class="settings-container">
+                    <div class="settings-element">
+                      <p class="caption">Open new containers in groups at intervals of</p>
+                      <div class="settings-form">
+                        <input type="number" min="1" step="1" id="interval-between-containers" class="settings-input" placeholder="Interval between containers" value="1000">
+                        <p class="error" id="interval-between-containers-error"></p>
+                      </div>
+                      <p class="caption">milliseconds.</p>
+                    </div>
+                  </li>
+
+                  <li class="settings-container">
+                    <div class="settings-element">
+                      <p class="caption">Open containers' groups at intervals of</p>
+                      <div class="settings-form">
+                        <input type="number" min="1" step="1" id="interval-between-groups" class="settings-input" placeholder="Interval between groups" value="500">
+                        <p class="error" id="interval-between-groups-error"></p>
+                      </div>
+                      <p class="caption">milliseconds.</p>
+                    </div>
+                  </li>
+                </ul>
+              </fieldset>
+            </li>
           </ol>
         </div>
 
