@@ -8,6 +8,7 @@ const optionsTitle = document.getElementById('options-title');
 const shortcutClearBtnArray = document.querySelectorAll('.clear-button');
 const shortcutResetBtnArray = document.querySelectorAll('.reset-button');
 const inputsShortcutsArr = document.querySelectorAll('.shortcuts-input');
+const inputsDelaySettingsArr = document.querySelectorAll('.delay-settings-input');
 /*
 Default settings. Initialize storage to these values.
 */
@@ -17,6 +18,15 @@ const defaultShortCutsArr = [
     shortcut: 'Ctrl+Alt+L',
   },
 ];
+
+/*
+Default settings. Initialize storage to these values.
+*/
+const defaultDelaySettings = {
+  numberContainersInGroup: 3,
+  delayToOpenBetweenGroupsMSeconds: 500,
+  delayToOpenBetweenContainersMSeconds: 1000,
+};
 
 /*
 Generic error logger.
@@ -45,6 +55,10 @@ function setShortCutsOnLoadPage(settings) {
   }
 }
 
+function updateDelaySettings(delaySettings) {
+  browser.storage.local.set({ storedDelaySettings: delaySettings });
+}
+
 /*
 On startup, check whether we have stored settings.
 If we don't, then store the default settings.
@@ -52,6 +66,10 @@ If we don't, then store the default settings.
 async function checkStoredSettings(storedSettings) {
   if (!storedSettings.storedShortCutsArr) {
     browser.storage.local.set({ storedShortCutsArr: defaultShortCutsArr });
+  }
+
+  if (!storedSettings.storedDelaySettings) {
+    browser.storage.local.set({ storedDelaySettings: defaultDelaySettings });
   }
 
   const settings = await browser.storage.local.get('storedShortCutsArr');
@@ -212,5 +230,31 @@ function handleKeyDown(e) {
 inputsShortcutsArr.forEach((item) => {
   item.addEventListener('keydown', (e) => {
     handleKeyDown(e);
+  });
+});
+
+// Settings tab Delay options
+const numberContainersInGroupInput = document.getElementById('number-containers-in-group');
+const intervalBetweenContainersInput = document.getElementById('interval-between-containers');
+const intervalBetweenGroupsInput = document.getElementById('interval-between-groups');
+
+const delaySettings = {
+  numberContainersInGroup: numberContainersInGroupInput.value,
+  delayToOpenBetweenContainersMSeconds: intervalBetweenContainersInput.value,
+  delayToOpenBetweenGroupsMSeconds: intervalBetweenGroupsInput.value,
+};
+
+inputsDelaySettingsArr.forEach((item) => {
+  item.addEventListener('input', (e) => {
+    const itemId = item.getAttribute('id');
+
+    if (itemId === 'number-containers-in-group') {
+      delaySettings.numberContainersInGroup = item.value;
+    } else if (itemId === 'interval-between-containers') {
+      delaySettings.delayToOpenBetweenContainersMSeconds = item.value;
+    } else if (itemId === 'interval-between-groups') {
+      delaySettings.delayToOpenBetweenGroupsMSeconds = item.value;
+    };
+    updateDelaySettings(delaySettings);
   });
 });

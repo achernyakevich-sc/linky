@@ -6,14 +6,13 @@ async function openCurrentTabInAvailableContainers(
   currentCookieStoreId,
   numberContainersInGroup,
   delayToOpenBetweenGroupsMSeconds,
-  delayToOpenBetweenContainersMSeconds
+  delayToOpenBetweenContainersMSeconds,
 ) {
   const containers = await browser.contextualIdentities.query({});
-
   for (let i = 0; i < containers.length; i++) {
-    let isNewGroup = (i !== 0 && i % 3 === 0) ? true : false;
-    let delayToOpenContainers = isNewGroup ? i * delayToOpenBetweenContainersMSeconds + delayToOpenBetweenGroupsMSeconds : i * delayToOpenBetweenContainersMSeconds;
-    console.log({'delayToOpenContainers': delayToOpenContainers});
+    const isNewGroup = (i !== 0 && i % numberContainersInGroup === 0);
+    const delayToOpenContainers = isNewGroup ? i * delayToOpenBetweenContainersMSeconds + Number(delayToOpenBetweenGroupsMSeconds) : i * delayToOpenBetweenContainersMSeconds;
+    console.log('delayToOpenContainers', delayToOpenContainers);
     (function (index) {
       setTimeout(function () {
         if (containers[i].cookieStoreId !== currentCookieStoreId) {
@@ -36,12 +35,26 @@ browser.menus.create({
   contexts: ['tab'],
 });
 
+const defaultDelaySettings = {
+  numberContainersInGroup: 3,
+  delayToOpenBetweenGroupsMSeconds: 500,
+  delayToOpenBetweenContainersMSeconds: 1000,
+};
+
 /*
 The click event listener, where we perform the appropriate action
 when extension menu item ('Open in available Containers') was clicked.
 */
 browser.menus.onClicked.addListener((info, tab) => {
-  openCurrentTabInAvailableContainers(tab.url, tab.cookieStoreId, 3, 500, 1000);
+  browser.storage.local.get('storedDelaySettings').then((data) => {
+    let delaySettings;
+    if (data.storedDelaySettings) {
+      delaySettings = data.storedDelaySettings;
+    } else {
+      delaySettings = defaultDelaySettings;
+    }
+    openCurrentTabInAvailableContainers(tab.url, tab.cookieStoreId, delaySettings.numberContainersInGroup, delaySettings.delayToOpenBetweenGroupsMSeconds, delaySettings.delayToOpenBetweenContainersMSeconds);
+  });
 });
 
 /*
@@ -49,5 +62,13 @@ The click event listener, where we perform the appropriate action
 when extension icon was clicked.
 */
 browser.browserAction.onClicked.addListener((tab, OnClickData) => {
-  openCurrentTabInAvailableContainers(tab.url, tab.cookieStoreId, 3, 500, 1000);
+  browser.storage.local.get('storedDelaySettings').then((data) => {
+    let delaySettings;
+    if (data.storedDelaySettings) {
+      delaySettings = data.storedDelaySettings;
+    } else {
+      delaySettings = defaultDelaySettings;
+    }
+    openCurrentTabInAvailableContainers(tab.url, tab.cookieStoreId, delaySettings.numberContainersInGroup, delaySettings.delayToOpenBetweenGroupsMSeconds, delaySettings.delayToOpenBetweenContainersMSeconds);
+  });
 });
