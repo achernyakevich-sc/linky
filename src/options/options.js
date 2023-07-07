@@ -9,6 +9,10 @@ const shortcutClearBtnArray = document.querySelectorAll('.clear-button');
 const shortcutResetBtnArray = document.querySelectorAll('.reset-button');
 const inputsShortcutsArr = document.querySelectorAll('.shortcuts-input');
 const inputsDelaySettingsArr = document.querySelectorAll('.delay-settings-input');
+const numberContainersInGroupInput = document.getElementById('number-containers-in-group');
+const intervalBetweenContainersInput = document.getElementById('interval-between-containers');
+const intervalBetweenGroupsInput = document.getElementById('interval-between-groups');
+
 /*
 Default settings. Initialize storage to these values.
 */
@@ -55,6 +59,16 @@ function setShortCutsOnLoadPage(settings) {
   }
 }
 
+function setDelaySettingsOnLoadOptionPage(storedDelaySettings) {
+  if (storedDelaySettings) {
+    numberContainersInGroupInput.value = storedDelaySettings.numberContainersInGroup;
+    intervalBetweenContainersInput.value = storedDelaySettings.delayToOpenBetweenContainersMSeconds;
+    intervalBetweenGroupsInput.value = storedDelaySettings.delayToOpenBetweenGroupsMSeconds;
+  } else {
+    onError();
+  }
+}
+
 function updateDelaySettings(delaySettings) {
   browser.storage.local.set({ storedDelaySettings: delaySettings });
 }
@@ -70,11 +84,16 @@ async function checkStoredSettings(storedSettings) {
 
   if (!storedSettings.storedDelaySettings) {
     browser.storage.local.set({ storedDelaySettings: defaultDelaySettings });
+    numberContainersInGroupInput.value = defaultDelaySettings.numberContainersInGroup;
+    intervalBetweenContainersInput.value = defaultDelaySettings.delayToOpenBetweenContainersMSeconds;
+    intervalBetweenGroupsInput.value = defaultDelaySettings.delayToOpenBetweenGroupsMSeconds;
   }
 
   const settings = await browser.storage.local.get('storedShortCutsArr');
+  const delaySettings = await browser.storage.local.get('storedDelaySettings');
 
   await setShortCutsOnLoadPage(settings);
+  await setDelaySettingsOnLoadOptionPage(delaySettings.storedDelaySettings);
 }
 
 browser.storage.local.get().then(checkStoredSettings, onError);
@@ -234,27 +253,21 @@ inputsShortcutsArr.forEach((item) => {
 });
 
 // Settings tab Delay options
-const numberContainersInGroupInput = document.getElementById('number-containers-in-group');
-const intervalBetweenContainersInput = document.getElementById('interval-between-containers');
-const intervalBetweenGroupsInput = document.getElementById('interval-between-groups');
-
-const delaySettings = {
-  numberContainersInGroup: numberContainersInGroupInput.value,
-  delayToOpenBetweenContainersMSeconds: intervalBetweenContainersInput.value,
-  delayToOpenBetweenGroupsMSeconds: intervalBetweenGroupsInput.value,
-};
-
 inputsDelaySettingsArr.forEach((item) => {
   item.addEventListener('input', (e) => {
-    const itemId = item.getAttribute('id');
+    browser.storage.local.get('storedDelaySettings').then((data) => {
+      const itemId = item.getAttribute('id');
 
-    if (itemId === 'number-containers-in-group') {
-      delaySettings.numberContainersInGroup = item.value;
-    } else if (itemId === 'interval-between-containers') {
-      delaySettings.delayToOpenBetweenContainersMSeconds = item.value;
-    } else if (itemId === 'interval-between-groups') {
-      delaySettings.delayToOpenBetweenGroupsMSeconds = item.value;
-    };
-    updateDelaySettings(delaySettings);
+      if (itemId === 'number-containers-in-group') {
+        data.storedDelaySettings.numberContainersInGroup = item.value;
+      }
+      if (itemId === 'interval-between-containers') {
+        data.storedDelaySettings.delayToOpenBetweenContainersMSeconds = item.value;
+      }
+      if (itemId === 'interval-between-groups') {
+        data.storedDelaySettings.delayToOpenBetweenGroupsMSeconds = item.value;
+      }
+      updateDelaySettings(data.storedDelaySettings);
+    });
   });
 });

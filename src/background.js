@@ -12,7 +12,6 @@ async function openCurrentTabInAvailableContainers(
   for (let i = 0; i < containers.length; i++) {
     const isNewGroup = (i !== 0 && i % numberContainersInGroup === 0);
     const delayToOpenContainers = isNewGroup ? i * delayToOpenBetweenContainersMSeconds + Number(delayToOpenBetweenGroupsMSeconds) : i * delayToOpenBetweenContainersMSeconds;
-    console.log('delayToOpenContainers', delayToOpenContainers);
     (function (index) {
       setTimeout(function () {
         if (containers[i].cookieStoreId !== currentCookieStoreId) {
@@ -41,11 +40,7 @@ const defaultDelaySettings = {
   delayToOpenBetweenContainersMSeconds: 1000,
 };
 
-/*
-The click event listener, where we perform the appropriate action
-when extension menu item ('Open in available Containers') was clicked.
-*/
-browser.menus.onClicked.addListener((info, tab) => {
+function openContainersWithDelay(tab) {
   browser.storage.local.get('storedDelaySettings').then((data) => {
     let delaySettings;
     if (data.storedDelaySettings) {
@@ -55,6 +50,13 @@ browser.menus.onClicked.addListener((info, tab) => {
     }
     openCurrentTabInAvailableContainers(tab.url, tab.cookieStoreId, delaySettings.numberContainersInGroup, delaySettings.delayToOpenBetweenGroupsMSeconds, delaySettings.delayToOpenBetweenContainersMSeconds);
   });
+}
+/*
+The click event listener, where we perform the appropriate action
+when extension menu item ('Open in available Containers') was clicked.
+*/
+browser.menus.onClicked.addListener((info, tab) => {
+  openContainersWithDelay(tab);
 });
 
 /*
@@ -62,13 +64,5 @@ The click event listener, where we perform the appropriate action
 when extension icon was clicked.
 */
 browser.browserAction.onClicked.addListener((tab, OnClickData) => {
-  browser.storage.local.get('storedDelaySettings').then((data) => {
-    let delaySettings;
-    if (data.storedDelaySettings) {
-      delaySettings = data.storedDelaySettings;
-    } else {
-      delaySettings = defaultDelaySettings;
-    }
-    openCurrentTabInAvailableContainers(tab.url, tab.cookieStoreId, delaySettings.numberContainersInGroup, delaySettings.delayToOpenBetweenGroupsMSeconds, delaySettings.delayToOpenBetweenContainersMSeconds);
-  });
+  openContainersWithDelay(tab);
 });
