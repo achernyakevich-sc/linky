@@ -25,7 +25,7 @@ async function openCurrentTabInAvailableContainers(
       });
     }, totalDelay);
 
-    totalDelay += delayToOpenBetweenContainersMSeconds;
+    totalDelay += Number(delayToOpenBetweenContainersMSeconds);
   });
 }
 
