@@ -1,19 +1,3 @@
-/* A function that takes an array of containers and a number of containers per group
-  and returns an array of container groups
-*/
-function prepareArrayGroupsOfContainers(containers, numberContainersInGroup) {
-  const containerGroups = [];
-  let group = [];
-  for (let i = 0; i < containers.length; i++) {
-    group.push(containers[i]);
-    if (group.length === numberContainersInGroup || i === containers.length - 1) {
-      containerGroups.push(group);
-      group = [];
-    }
-  }
-  return containerGroups;
-}
-
 /*
 Open current tab in available Containers.
 */
@@ -26,13 +10,21 @@ async function openCurrentTabInAvailableContainers(
 ) {
   const containers = await browser.contextualIdentities.query({});
   const otherContainers = containers.filter(container => container.cookieStoreId !== currentCookieStoreId);
-  const containerGroups = prepareArrayGroupsOfContainers(otherContainers, numberContainersInGroup);
+  const containerGroups = [];
+  let group = [];
+  for (let i = 0; i < otherContainers.length; i++) {
+    group.push(otherContainers[i]);
+    if (group.length === numberContainersInGroup || i === otherContainers.length - 1) {
+      containerGroups.push(group);
+      group = [];
+    }
+  }
 
   let totalDelay = 0;
-  for (let i = 0; i < containerGroups.length; i++) {
-    const currentGroup = containerGroups[i];
-    for (let j = 0; j < currentGroup.length; j++) {
-      const currentContainer = currentGroup[j];
+  for (let j = 0; j < containerGroups.length; j++) {
+    const currentGroup = containerGroups[j];
+    for (let k = 0; k < currentGroup.length; k++) {
+      const currentContainer = currentGroup[k];
       setTimeout(() => {
         browser.tabs.create({
           cookieStoreId: currentContainer.cookieStoreId,
