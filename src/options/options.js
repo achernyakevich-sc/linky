@@ -200,6 +200,21 @@ function showErrorMessage(e) {
   } else if (normalizedKey === '') errorElement.innerText = browser.i18n.getMessage('invalidLetterMessage');
 }
 
+function validationDelayOptions(input, e) {
+  const errorElement = document.getElementById(`${e.target.id}_error`);
+  const inputValue = input.value;
+  if (inputValue === '') {
+    errorElement.innerText = 'Field can\'t be empty';
+  } else if (!/^\s*[\d]+(?:,[\d]+)?\s*$/.test(inputValue)) {
+    errorElement.innerText = 'Please enter a number';
+  } else {
+    errorElement.innerText = '';
+  }
+
+  const isValid = errorElement.innerText === '';
+  return isValid;
+}
+
 function displayingInputValue(e) {
   const normalizedKey = normalizeKey(e.key, e.keyCode);
   const ctrlKeyMac = isMac ? 'MacCtrl+' : 'Ctrl+';
@@ -267,7 +282,9 @@ inputsDelaySettingsArr.forEach((item) => {
       if (itemId === 'interval-between-groups') {
         data.storedDelaySettings.delayToOpenBetweenGroupsMSeconds = item.value;
       }
-      updateDelaySettings(data.storedDelaySettings);
+      if (validationDelayOptions(item, e)) {
+        updateDelaySettings(data.storedDelaySettings);
+      }
     });
   });
 });
