@@ -10,23 +10,31 @@ async function openCurrentTabInAvailableContainers(
 ) {
   const containers = await browser.contextualIdentities.query({});
   const otherContainers = containers.filter(container => container.cookieStoreId !== currentCookieStoreId);
-  let totalDelay = 0;
-
-  otherContainers.forEach((container, index) => {
-    const isNewGroup = (index !== 0 && (index + 1) % numberContainersInGroup === 0);
-    if (isNewGroup) {
-      totalDelay += Number(delayToOpenBetweenGroupsMSeconds);
+  const containerGroups = [];
+  let group = [];
+  for (let i = 0; i < otherContainers.length; i++) {
+    group.push(otherContainers[i]);
+    if (group.length === numberContainersInGroup || i === otherContainers.length - 1) {
+      containerGroups.push(group);
+      group = [];
     }
+  }
 
-    setTimeout(() => {
-      browser.tabs.create({
-        cookieStoreId: container.cookieStoreId,
-        url: currentTabUrl,
-      });
-    }, totalDelay);
-
-    totalDelay += Number(delayToOpenBetweenContainersMSeconds);
-  });
+  let totalDelay = 0;
+  for (let j = 0; j < containerGroups.length; j++) {
+    const currentGroup = containerGroups[j];
+    for (let k = 0; k < currentGroup.length; k++) {
+      const currentContainer = currentGroup[k];
+      setTimeout(() => {
+        browser.tabs.create({
+          cookieStoreId: currentContainer.cookieStoreId,
+          url: currentTabUrl,
+        });
+      }, totalDelay);
+      totalDelay += delayToOpenBetweenContainersMSeconds;
+    }
+    totalDelay += delayToOpenBetweenGroupsMSeconds;
+  }
 }
 
 /*
@@ -52,7 +60,10 @@ function openContainersWithDelay(tab) {
     } else {
       delaySettings = defaultDelaySettings;
     }
-    openCurrentTabInAvailableContainers(tab.url, tab.cookieStoreId, delaySettings.numberContainersInGroup, delaySettings.delayToOpenBetweenGroupsMSeconds, delaySettings.delayToOpenBetweenContainersMSeconds);
+    const numberContainersInGroup = Number(delaySettings.numberContainersInGroup);
+    const delayToOpenBetweenGroupsMSeconds = Number(delaySettings.delayToOpenBetweenGroupsMSeconds);
+    const delayToOpenBetweenContainersMSeconds = Number(delaySettings.delayToOpenBetweenContainersMSeconds);
+    openCurrentTabInAvailableContainers(tab.url, tab.cookieStoreId, numberContainersInGroup, delayToOpenBetweenGroupsMSeconds, delayToOpenBetweenContainersMSeconds);
   });
 }
 /*
