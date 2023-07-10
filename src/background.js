@@ -9,20 +9,24 @@ async function openCurrentTabInAvailableContainers(
   delayToOpenBetweenContainersMSeconds,
 ) {
   const containers = await browser.contextualIdentities.query({});
-  for (let i = 0; i < containers.length; i++) {
-    const isNewGroup = (i !== 0 && i % numberContainersInGroup === 0);
-    const delayToOpenContainers = isNewGroup ? i * delayToOpenBetweenContainersMSeconds + Number(delayToOpenBetweenGroupsMSeconds) : i * delayToOpenBetweenContainersMSeconds;
-    (function (index) {
-      setTimeout(function () {
-        if (containers[i].cookieStoreId !== currentCookieStoreId) {
-          browser.tabs.create({
-            cookieStoreId: containers[i].cookieStoreId,
-            url: currentTabUrl,
-          });
-        }
-      }, delayToOpenContainers);
-    })(i);
-  }
+  const otherContainers = containers.filter(container => container.cookieStoreId !== currentCookieStoreId);
+  let totalDelay = 0;
+
+  otherContainers.forEach((container, index) => {
+    const isNewGroup = (index !== 0 && (index + 1) % numberContainersInGroup === 0);
+    if (isNewGroup) {
+      totalDelay += Number(delayToOpenBetweenGroupsMSeconds);
+    }
+
+    setTimeout(() => {
+      browser.tabs.create({
+        cookieStoreId: container.cookieStoreId,
+        url: currentTabUrl,
+      });
+    }, totalDelay);
+
+    totalDelay += delayToOpenBetweenContainersMSeconds;
+  });
 }
 
 /*
