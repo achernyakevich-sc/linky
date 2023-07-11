@@ -270,9 +270,8 @@ inputsShortcutsArr.forEach((item) => {
 // Settings tab Delay options
 inputsDelaySettingsArr.forEach((item) => {
   item.addEventListener('input', (e) => {
+    const itemId = item.getAttribute('id');
     browser.storage.local.get('storedDelaySettings').then((data) => {
-      const itemId = item.getAttribute('id');
-
       if (itemId === 'number-containers-in-group') {
         data.storedDelaySettings.numberContainersInGroup = item.value;
       }
@@ -283,6 +282,31 @@ inputsDelaySettingsArr.forEach((item) => {
         data.storedDelaySettings.delayToOpenBetweenGroupsMSeconds = item.value;
       }
       if (validationDelayOptions(item, e)) {
+        updateDelaySettings(data.storedDelaySettings);
+      }
+    });
+  });
+});
+
+inputsDelaySettingsArr.forEach((item) => {
+  item.addEventListener('blur', (e) => {
+    const itemId = item.getAttribute('id');
+    const errorElement = document.getElementById(`${e.target.id}_error`);
+    browser.storage.local.get('storedDelaySettings').then((data) => {
+      if (item.value === '') {
+        if (itemId === 'number-containers-in-group') {
+          item.value = defaultDelaySettings.numberContainersInGroup;
+          data.storedDelaySettings.numberContainersInGroup = item.value;
+        }
+        if (itemId === 'interval-between-containers') {
+          item.value = defaultDelaySettings.delayToOpenBetweenContainersMSeconds;
+          data.storedDelaySettings.delayToOpenBetweenContainersMSeconds = item.value;
+        }
+        if (itemId === 'interval-between-groups') {
+          item.value = defaultDelaySettings.delayToOpenBetweenGroupsMSeconds;
+          data.storedDelaySettings.delayToOpenBetweenGroupsMSeconds = item.value;
+        }
+        errorElement.innerText = '';
         updateDelaySettings(data.storedDelaySettings);
       }
     });
