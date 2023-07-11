@@ -8,16 +8,12 @@ async function openCurrentTabInAvailableContainers(
   delayToOpenBetweenGroupsMSeconds,
   delayToOpenBetweenContainersMSeconds,
 ) {
+  // Preparing array with groups of containers
   const containers = await browser.contextualIdentities.query({});
   const otherContainers = containers.filter(container => container.cookieStoreId !== currentCookieStoreId);
   const containerGroups = [];
-  let group = [];
-  for (let i = 0; i < otherContainers.length; i++) {
-    group.push(otherContainers[i]);
-    if (group.length === numberContainersInGroup || i === otherContainers.length - 1) {
-      containerGroups.push(group);
-      group = [];
-    }
+  for (let i = 0; i < otherContainers.length; i += numberContainersInGroup) {
+    containerGroups.push(otherContainers.slice(i, i + numberContainersInGroup));
   }
 
   let totalDelay = 0;
