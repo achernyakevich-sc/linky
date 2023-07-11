@@ -32,6 +32,18 @@ const defaultDelaySettings = {
   delayToOpenBetweenContainersMSeconds: 1000,
 };
 
+const defaultDelayValuesMap = {
+  'number-containers-in-group': defaultDelaySettings.numberContainersInGroup,
+  'interval-between-containers': defaultDelaySettings.delayToOpenBetweenContainersMSeconds,
+  'interval-between-groups': defaultDelaySettings.delayToOpenBetweenGroupsMSeconds,
+};
+
+const settingsDelayMap = {
+  'number-containers-in-group': 'numberContainersInGroup',
+  'interval-between-containers': 'delayToOpenBetweenContainersMSeconds',
+  'interval-between-groups': 'delayToOpenBetweenGroupsMSeconds',
+};
+
 /*
 Generic error logger.
 */
@@ -268,47 +280,31 @@ inputsShortcutsArr.forEach((item) => {
 });
 
 // Settings tab Delay options
-inputsDelaySettingsArr.forEach((item) => {
-  item.addEventListener('input', (e) => {
-    const itemId = item.getAttribute('id');
-    browser.storage.local.get('storedDelaySettings').then((data) => {
-      if (itemId === 'number-containers-in-group') {
-        data.storedDelaySettings.numberContainersInGroup = item.value;
-      }
-      if (itemId === 'interval-between-containers') {
-        data.storedDelaySettings.delayToOpenBetweenContainersMSeconds = item.value;
-      }
-      if (itemId === 'interval-between-groups') {
-        data.storedDelaySettings.delayToOpenBetweenGroupsMSeconds = item.value;
-      }
-      if (validationDelayOptions(item, e)) {
-        updateDelaySettings(data.storedDelaySettings);
-      }
-    });
+function handleInput(e) {
+  const itemId = e.target.id;
+  browser.storage.local.get('storedDelaySettings').then((data) => {
+    data.storedDelaySettings[settingsDelayMap[itemId]] = e.target.value;
+    if (validationDelayOptions(e.target, e)) {
+      updateDelaySettings(data.storedDelaySettings);
+    }
   });
-});
+}
 
-inputsDelaySettingsArr.forEach((item) => {
-  item.addEventListener('blur', (e) => {
-    const itemId = item.getAttribute('id');
-    const errorElement = document.getElementById(`${e.target.id}_error`);
-    browser.storage.local.get('storedDelaySettings').then((data) => {
-      if (item.value === '') {
-        if (itemId === 'number-containers-in-group') {
-          item.value = defaultDelaySettings.numberContainersInGroup;
-          data.storedDelaySettings.numberContainersInGroup = item.value;
-        }
-        if (itemId === 'interval-between-containers') {
-          item.value = defaultDelaySettings.delayToOpenBetweenContainersMSeconds;
-          data.storedDelaySettings.delayToOpenBetweenContainersMSeconds = item.value;
-        }
-        if (itemId === 'interval-between-groups') {
-          item.value = defaultDelaySettings.delayToOpenBetweenGroupsMSeconds;
-          data.storedDelaySettings.delayToOpenBetweenGroupsMSeconds = item.value;
-        }
-        errorElement.innerText = '';
-        updateDelaySettings(data.storedDelaySettings);
-      }
-    });
+function handleBlur(e) {
+  const itemId = e.target.id;
+  const errorElement = document.getElementById(`${itemId}_error`);
+  browser.storage.local.get('storedDelaySettings').then((data) => {
+    if (e.target.value === '') {
+      e.target.value = defaultDelayValuesMap[itemId];
+      data.storedDelaySettings[settingsDelayMap[itemId]] = e.target.value;
+      errorElement.innerText = '';
+      updateDelaySettings(data.storedDelaySettings);
+    }
   });
+}
+
+// Add event listeners to each item using the same functions
+inputsDelaySettingsArr.forEach((item) => {
+  item.addEventListener('input', handleInput);
+  item.addEventListener('blur', handleBlur);
 });
