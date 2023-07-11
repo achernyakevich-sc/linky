@@ -216,9 +216,7 @@ function validationDelayOptions(input, e) {
   const errorElement = document.getElementById(`${e.target.id}_error`);
   const inputValue = input.value;
   if (inputValue === '') {
-    errorElement.innerText = 'Field can\'t be empty';
-  } else if (!/^\s*[\d]+(?:,[\d]+)?\s*$/.test(inputValue)) {
-    errorElement.innerText = 'Please enter a number';
+    errorElement.innerText = 'Field can\'t be empty and should content number';
   } else {
     errorElement.innerText = '';
   }
