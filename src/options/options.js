@@ -47,7 +47,7 @@ let globalConfig = {
 };
 
 function handleError(error) {
-  console.log(`Error: ${error}`);
+  console.error(error);
 }
 function handleResponse(message) {
   console.log(`Message from the background script: ${message.response}`);
@@ -329,6 +329,4 @@ browser.storage.local.get('config').then((data) => {
   saveSettings(JSON.parse(data.config));
   setDelaySettingsOnLoadOptionPage(delaySettings);
   setShortCutsOnLoadPage(shortcutsSettings);
-}).catch((err) => {
-  console.log('Error:', err);
-});
+}).catch((error) => console.error(error));

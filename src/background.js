@@ -22,9 +22,7 @@ browser.storage.local.get('config').then((data) => {
   if (!data.length) {
     browser.storage.local.set({ config: JSON.stringify(globalConfig) });
   }
-}).catch((err) => {
-  console.log('err', err);
-});
+}).catch((error) => console.error(error));
 
 /*
 Open current tab in available Containers.
