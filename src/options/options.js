@@ -1,3 +1,33 @@
+const DEFAULT_CONFIG = {
+  "version": "0.2-SNAPSHOT",
+  "updatedOn": "Tue Jul 11 2023 19:52:49 GMT+0300 (Moscow Standard Time)",
+  "settings": {
+    "shortcuts": [
+      {
+        "id": "_execute_browser_action",
+        "shortcut": "Ctrl+Alt+L",
+      },
+    ],
+    "containerTabsOpeningControl": {
+      "numberOfContainersInGroup": 3,
+      "containersInGroupOpeningInterval": 1000,
+      "groupsOpeningInterval": 500,
+    },
+  },
+};
+
+/*
+Default settings for shortcuts and delays - need for moment when
+user insert incorrect values on options page
+*/
+const defaultShortCutsArr = DEFAULT_CONFIG.settings.shortcuts;
+const defaultContainerTabsOpeningControl = DEFAULT_CONFIG.settings.containerTabsOpeningControl;
+const settingsDelayMap = {
+  'number-of-containers-in-group': 'numberOfContainersInGroup',
+  'containers-in-group-opening-interval': 'containersInGroupOpeningInterval',
+  'groups-opening-interval': 'groupsOpeningInterval',
+};
+
 let globalConfig = {
   "version": "0.2-SNAPSHOT",
   "updatedOn": "Tue Jul 11 2023 19:52:49 GMT+0300 (Moscow Standard Time)",
@@ -53,36 +83,9 @@ const shortcutClearBtnArray = document.querySelectorAll('.clear-button');
 const shortcutResetBtnArray = document.querySelectorAll('.reset-button');
 const inputsShortcutsArr = document.querySelectorAll('.shortcuts-input');
 const inputsDelaySettingsArr = document.querySelectorAll('.delay-settings-input');
-const numberContainersInGroupInput = document.getElementById('number-containers-in-group');
-const intervalBetweenContainersInput = document.getElementById('interval-between-containers');
-const intervalBetweenGroupsInput = document.getElementById('interval-between-groups');
-
-/*
-Default settings for shortcuts - need for moment when user insert incorrect
-values on options page
-*/
-const defaultShortCutsArr = [
-  {
-    id: '_execute_browser_action',
-    shortcut: 'Ctrl+Alt+L',
-  },
-];
-
-/*
-Default settings for containerTabsOpeningControl - need for moment when user
-insert incorrect values on options page
-*/
-const defaultContainerTabsOpeningControl = {
-  'numberOfContainersInGroup': 3,
-  'containersInGroupOpeningInterval': 1000,
-  'groupsOpeningInterval': 500,
-};
-
-const settingsDelayMap = {
-  'number-containers-in-group': 'numberOfContainersInGroup',
-  'interval-between-containers': 'containersInGroupOpeningInterval',
-  'interval-between-groups': 'groupsOpeningInterval',
-};
+const numberContainersInGroupInput = document.getElementById('number-of-containers-in-group');
+const intervalBetweenContainersInput = document.getElementById('containers-in-group-opening-interval');
+const intervalBetweenGroupsInput = document.getElementById('groups-opening-interval');
 
 /*
 Generic error logger.
