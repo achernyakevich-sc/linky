@@ -1,3 +1,47 @@
+let globalConfig = {
+  "version": "0.2-SNAPSHOT",
+  "updatedOn": "Tue Jul 11 2023 19:52:49 GMT+0300 (Moscow Standard Time)",
+  "settings": {
+    "shortcuts": [
+      {
+        "id": "_execute_browser_action",
+        "shortcut": "Ctrl+Alt+Y",
+      },
+    ],
+    "containerTabsOpeningControl" : {
+      "numberOfContainersInGroup": 3,
+      "containersInGroupOpeningInterval": 1000,
+      "groupsOpeningInterval": 500,
+    },
+  },
+};
+
+function handleError(error) {
+  console.log(`Error: ${error}`);
+}
+function handleResponse(message) {
+  console.log(`Message from the background script: ${message.response}`);
+}
+
+function notifyBackgroundPage(e, config) {
+  console.log('config in notifyBackgroundPage options.js', config);
+  const sending = browser.runtime.sendMessage(config);
+  sending.then(handleResponse, handleError);
+}
+
+// Update global config variable
+function updateGlobalConfig(configJson) {
+  globalConfig = configJson;
+}
+
+// Save settings
+function saveSettings(configJson) {
+  browser.storage.local.set({ config: JSON.stringify(globalConfig) }).then(
+    updateGlobalConfig(configJson),
+    handleError,
+  );
+}
+
 document.querySelectorAll('[data-locale]').forEach((elem) => {
   const i18nElement = elem;
   i18nElement.innerText = browser.i18n.getMessage(i18nElement.dataset.locale);
@@ -14,7 +58,8 @@ const intervalBetweenContainersInput = document.getElementById('interval-between
 const intervalBetweenGroupsInput = document.getElementById('interval-between-groups');
 
 /*
-Default settings. Initialize storage to these values.
+Default settings for shortcuts - need for moment when user insert incorrect
+values on options page
 */
 const defaultShortCutsArr = [
   {
@@ -24,24 +69,19 @@ const defaultShortCutsArr = [
 ];
 
 /*
-Default settings. Initialize storage to these values.
+Default settings for containerTabsOpeningControl - need for moment when user
+insert incorrect values on options page
 */
-const defaultDelaySettings = {
-  numberContainersInGroup: 3,
-  delayToOpenBetweenGroupsMSeconds: 500,
-  delayToOpenBetweenContainersMSeconds: 1000,
-};
-
-const defaultDelayValuesMap = {
-  'number-containers-in-group': defaultDelaySettings.numberContainersInGroup,
-  'interval-between-containers': defaultDelaySettings.delayToOpenBetweenContainersMSeconds,
-  'interval-between-groups': defaultDelaySettings.delayToOpenBetweenGroupsMSeconds,
+const defaultContainerTabsOpeningControl = {
+  'numberOfContainersInGroup': 3,
+  'containersInGroupOpeningInterval': 1000,
+  'groupsOpeningInterval': 500,
 };
 
 const settingsDelayMap = {
-  'number-containers-in-group': 'numberContainersInGroup',
-  'interval-between-containers': 'delayToOpenBetweenContainersMSeconds',
-  'interval-between-groups': 'delayToOpenBetweenGroupsMSeconds',
+  'number-containers-in-group': 'numberOfContainersInGroup',
+  'interval-between-containers': 'containersInGroupOpeningInterval',
+  'interval-between-groups': 'groupsOpeningInterval',
 };
 
 /*
@@ -70,45 +110,6 @@ function setShortCutsOnLoadPage(settings) {
     onError();
   }
 }
-
-function setDelaySettingsOnLoadOptionPage(storedDelaySettings) {
-  if (storedDelaySettings) {
-    numberContainersInGroupInput.value = storedDelaySettings.numberContainersInGroup;
-    intervalBetweenContainersInput.value = storedDelaySettings.delayToOpenBetweenContainersMSeconds;
-    intervalBetweenGroupsInput.value = storedDelaySettings.delayToOpenBetweenGroupsMSeconds;
-  } else {
-    onError();
-  }
-}
-
-function updateDelaySettings(delaySettings) {
-  browser.storage.local.set({ storedDelaySettings: delaySettings });
-}
-
-/*
-On startup, check whether we have stored settings.
-If we don't, then store the default settings.
-*/
-async function checkStoredSettings(storedSettings) {
-  if (!storedSettings.storedShortCutsArr) {
-    browser.storage.local.set({ storedShortCutsArr: defaultShortCutsArr });
-  }
-
-  if (!storedSettings.storedDelaySettings) {
-    browser.storage.local.set({ storedDelaySettings: defaultDelaySettings });
-    numberContainersInGroupInput.value = defaultDelaySettings.numberContainersInGroup;
-    intervalBetweenContainersInput.value = defaultDelaySettings.delayToOpenBetweenContainersMSeconds;
-    intervalBetweenGroupsInput.value = defaultDelaySettings.delayToOpenBetweenGroupsMSeconds;
-  }
-
-  const settings = await browser.storage.local.get('storedShortCutsArr');
-  const delaySettings = await browser.storage.local.get('storedDelaySettings');
-
-  await setShortCutsOnLoadPage(settings);
-  await setDelaySettingsOnLoadOptionPage(delaySettings.storedDelaySettings);
-}
-
-browser.storage.local.get().then(checkStoredSettings, onError);
 
 sidebarMenuTabs.forEach((item) => {
   item.addEventListener('click', (e) => {
@@ -280,29 +281,45 @@ inputsShortcutsArr.forEach((item) => {
 // Settings tab Delay options
 function handleInput(e) {
   const itemId = e.target.id;
-  browser.storage.local.get('storedDelaySettings').then((data) => {
-    data.storedDelaySettings[settingsDelayMap[itemId]] = e.target.value;
-    if (validationDelayOptions(e.target, e)) {
-      updateDelaySettings(data.storedDelaySettings);
-    }
-  });
+  if (validationDelayOptions(e.target, e)) {
+    const updatedConfig = globalConfig;
+    updatedConfig.settings.containerTabsOpeningControl[settingsDelayMap[itemId]] = Number(e.target.value);
+    saveSettings(updatedConfig);
+    notifyBackgroundPage(e, updatedConfig);
+  }
 }
 
 function handleBlur(e) {
   const itemId = e.target.id;
   const errorElement = document.getElementById(`${itemId}_error`);
-  browser.storage.local.get('storedDelaySettings').then((data) => {
-    if (e.target.value === '') {
-      e.target.value = defaultDelayValuesMap[itemId];
-      data.storedDelaySettings[settingsDelayMap[itemId]] = e.target.value;
-      errorElement.innerText = '';
-      updateDelaySettings(data.storedDelaySettings);
-    }
-  });
+  if (e.target.value === '') {
+    e.target.value = defaultContainerTabsOpeningControl[settingsDelayMap[itemId]];
+    // delaySettings[settingsDelayMap[itemId]] = e.target.value;
+    errorElement.innerText = '';
+  } else {
+    const updatedConfig = globalConfig;
+    updatedConfig.settings.containerTabsOpeningControl[settingsDelayMap[itemId]] = Number(e.target.value);
+    saveSettings(updatedConfig);
+    notifyBackgroundPage(e, updatedConfig);
+  }
 }
 
 // Add event listeners to each item using the same functions
 inputsDelaySettingsArr.forEach((item) => {
   item.addEventListener('input', handleInput);
   item.addEventListener('blur', handleBlur);
+});
+
+function setDelaySettingsOnLoadOptionPage(containerTabsOpeningControl) {
+  numberContainersInGroupInput.value = containerTabsOpeningControl.numberOfContainersInGroup;
+  intervalBetweenContainersInput.value = containerTabsOpeningControl.containersInGroupOpeningInterval;
+  intervalBetweenGroupsInput.value = containerTabsOpeningControl.groupsOpeningInterval;
+}
+
+browser.storage.local.get('config').then((data) => {
+  const delaySettings = JSON.parse(data.config).settings.containerTabsOpeningControl;
+  saveSettings(JSON.parse(data.config));
+  setDelaySettingsOnLoadOptionPage(delaySettings);
+}).catch((err) => {
+  console.log('Error:', err);
 });
