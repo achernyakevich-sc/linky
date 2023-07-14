@@ -71,7 +71,6 @@ browser.menus.create({
 });
 
 function openContainersWithDelay(tab) {
-  console.log('%%%%% globalConfig', globalConfig);
   const delaySettings = globalConfig.settings.containerTabsOpeningControl;
   openCurrentTabInAvailableContainers(
     tab.url,

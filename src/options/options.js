@@ -36,7 +36,6 @@ function updateGlobalConfig(configJson) {
 
 // Save settings
 function saveSettings(configJson) {
-  console.log('####### configJson', configJson);
   browser.storage.local.set({ config: JSON.stringify(globalConfig) }).then(
     updateGlobalConfig(configJson),
     handleError,
@@ -253,11 +252,9 @@ function handleKeyDown(e) {
   if (isValidShortcut) {
     updateBrowserCommands(e.target.id, value);
     const updatedConfig = globalConfig;
-    console.log('1 updatedConfig', updatedConfig);
     updatedConfig.settings.shortcuts
       .filter((el) => el.id === e.target.id)
       .forEach((elem) => (elem.shortcut = e.target.value));
-    console.log('2 updatedConfig', updatedConfig);
     saveSettings(updatedConfig);
     notifyBackgroundPage(e, updatedConfig);
   }
@@ -310,7 +307,6 @@ function setDelaySettingsOnLoadOptionPage(containerTabsOpeningControl) {
 
 function setShortCutsOnLoadPage(shortcutsSettings) {
   if (shortcutsSettings.length) {
-    console.log('shortcutsSettings', shortcutsSettings);
     inputsShortcutsArr.forEach((item) => {
       const getShortcutElement = shortcutsSettings.find((el) => el.id === item.id);
       item.value = getShortcutElement.shortcut;
