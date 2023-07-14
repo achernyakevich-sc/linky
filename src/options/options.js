@@ -5,7 +5,7 @@ let globalConfig = {
     "shortcuts": [
       {
         "id": "_execute_browser_action",
-        "shortcut": "Ctrl+Alt+Y",
+        "shortcut": "Ctrl+Alt+L",
       },
     ],
     "containerTabsOpeningControl" : {
@@ -36,6 +36,7 @@ function updateGlobalConfig(configJson) {
 
 // Save settings
 function saveSettings(configJson) {
+  console.log('####### configJson', configJson);
   browser.storage.local.set({ config: JSON.stringify(globalConfig) }).then(
     updateGlobalConfig(configJson),
     handleError,
@@ -91,24 +92,8 @@ function onError(e) {
   console.error(e);
 }
 
-function setShortcutsToStorageAndBrowserCommands(event, value) {
+function updateBrowserCommands(event, value) {
   browser.commands.update({ name: event, shortcut: value });
-  browser.storage.local.set({ storedShortCutsArr: [{ id: event, shortcut: value }] });
-}
-
-function setShortCutsOnLoadPage(settings) {
-  if (settings) {
-    inputsShortcutsArr.forEach((item) => {
-      const getShortcutElement = settings.storedShortCutsArr.find((el) => el.id === item.id);
-      item.value = getShortcutElement.shortcut;
-      browser.commands.update({
-        name: item.id,
-        shortcut: getShortcutElement.shortcut,
-      });
-    });
-  } else {
-    onError();
-  }
 }
 
 sidebarMenuTabs.forEach((item) => {
@@ -126,7 +111,7 @@ shortcutClearBtnArray.forEach((item) => {
   const currentError = document.getElementById(`${currentId}_error`);
   item.addEventListener('click', () => {
     currentInput.value = '';
-    setShortcutsToStorageAndBrowserCommands(currentId, '');
+    updateBrowserCommands(currentId, '');
     currentError.innerText = '';
   });
 });
@@ -139,7 +124,7 @@ shortcutResetBtnArray.forEach((item) => {
   const getDefaultShortCutsById = defaultShortCutsArr.find((el) => el.id === currentId);
   item.addEventListener('click', () => {
     currentInput.value = getDefaultShortCutsById.shortcut;
-    setShortcutsToStorageAndBrowserCommands(currentId, currentInput.value);
+    updateBrowserCommands(currentId, currentInput.value);
     currentError.innerText = '';
   });
 });
@@ -265,9 +250,16 @@ function handleKeyDown(e) {
   e.target.value = value || '';
 
   const isValidShortcut = errorElement.innerText === '';
-
   if (isValidShortcut) {
-    setShortcutsToStorageAndBrowserCommands(e.target.id, value);
+    updateBrowserCommands(e.target.id, value);
+    const updatedConfig = globalConfig;
+    console.log('1 updatedConfig', updatedConfig);
+    updatedConfig.settings.shortcuts
+      .filter((el) => el.id === e.target.id)
+      .forEach((elem) => (elem.shortcut = e.target.value));
+    console.log('2 updatedConfig', updatedConfig);
+    saveSettings(updatedConfig);
+    notifyBackgroundPage(e, updatedConfig);
   }
 }
 
@@ -316,10 +308,28 @@ function setDelaySettingsOnLoadOptionPage(containerTabsOpeningControl) {
   intervalBetweenGroupsInput.value = containerTabsOpeningControl.groupsOpeningInterval;
 }
 
+function setShortCutsOnLoadPage(shortcutsSettings) {
+  if (shortcutsSettings.length) {
+    console.log('shortcutsSettings', shortcutsSettings);
+    inputsShortcutsArr.forEach((item) => {
+      const getShortcutElement = shortcutsSettings.find((el) => el.id === item.id);
+      item.value = getShortcutElement.shortcut;
+      browser.commands.update({
+        name: item.id,
+        shortcut: getShortcutElement.shortcut,
+      });
+    });
+  } else {
+    onError();
+  }
+}
+
 browser.storage.local.get('config').then((data) => {
   const delaySettings = JSON.parse(data.config).settings.containerTabsOpeningControl;
+  const shortcutsSettings = JSON.parse(data.config).settings.shortcuts;
   saveSettings(JSON.parse(data.config));
   setDelaySettingsOnLoadOptionPage(delaySettings);
+  setShortCutsOnLoadPage(shortcutsSettings);
 }).catch((err) => {
   console.log('Error:', err);
 });

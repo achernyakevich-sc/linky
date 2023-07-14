@@ -6,7 +6,7 @@ let globalConfig = {
     "shortcuts": [
       {
         "id": "_execute_browser_action",
-        "shortcut": "Ctrl+Alt+Y",
+        "shortcut": "Ctrl+Alt+L",
       },
     ],
     "containerTabsOpeningControl" : {
