@@ -30,23 +30,7 @@ const settingsDelayMap = {
   'groups-opening-interval': 'groupsOpeningInterval',
 };
 
-let globalConfig = {
-  "version": "0.2-SNAPSHOT",
-  "updatedOn": "Tue Jul 11 2023 19:52:49 GMT+0300 (Moscow Standard Time)",
-  "settings": {
-    "shortcuts": [
-      {
-        "id": "_execute_browser_action",
-        "shortcut": "Ctrl+Alt+L",
-      },
-    ],
-    "containerTabsOpeningControl" : {
-      "numberOfContainersInGroup": 3,
-      "containersInGroupOpeningInterval": 1000,
-      "groupsOpeningInterval": 500,
-    },
-  },
-};
+let linkyConfig = DEFAULT_CONFIG;
 
 function handleError(error) {
   console.error(error);
@@ -62,14 +46,14 @@ function notifyBackgroundPage(e, config) {
 }
 
 // Update global config variable
-function updateGlobalConfig(configJson) {
-  globalConfig = configJson;
+function updateLinkyConfig(configJson) {
+  linkyConfig = configJson;
 }
 
 // Save settings
 function saveSettings(configJson) {
-  browser.storage.local.set({ LINKY_ADD_ON_CONFIG: JSON.stringify(globalConfig) }).then(
-    updateGlobalConfig(configJson),
+  browser.storage.local.set({ LINKY_ADD_ON_CONFIG: JSON.stringify(linkyConfig) }).then(
+    updateLinkyConfig(configJson),
     handleError,
   );
 }
@@ -256,7 +240,7 @@ function handleKeyDown(e) {
   const isValidShortcut = errorElement.innerText === '';
   if (isValidShortcut) {
     updateBrowserCommands(e.target.id, value);
-    const updatedConfig = globalConfig;
+    const updatedConfig = linkyConfig;
     updatedConfig.settings.shortcuts
       .filter((el) => el.id === e.target.id)
       .forEach((elem) => (elem.shortcut = e.target.value));
@@ -276,7 +260,7 @@ inputsShortcutsArr.forEach((item) => {
 function handleInput(e) {
   const itemId = e.target.id;
   if (validationDelayOptions(e.target, e)) {
-    const updatedConfig = globalConfig;
+    const updatedConfig = linkyConfig;
     updatedConfig.settings.containerTabsOpeningControl[settingsDelayMap[itemId]] = Number(e.target.value);
     saveSettings(updatedConfig);
     notifyBackgroundPage(e, updatedConfig);
@@ -291,7 +275,7 @@ function handleBlur(e) {
     // delaySettings[settingsDelayMap[itemId]] = e.target.value;
     errorElement.innerText = '';
   } else {
-    const updatedConfig = globalConfig;
+    const updatedConfig = linkyConfig;
     updatedConfig.settings.containerTabsOpeningControl[settingsDelayMap[itemId]] = Number(e.target.value);
     saveSettings(updatedConfig);
     notifyBackgroundPage(e, updatedConfig);

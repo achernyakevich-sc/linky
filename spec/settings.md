@@ -10,13 +10,13 @@ Below there is Linky add-on's settings JSON structure and default values.
     "shortcuts": [
       {
         "id": "_execute_browser_action",
-        "shortcut": "Ctrl+Alt+Y"
+        "shortcut": "Ctrl+Alt+L"
       }
     ],
     "containerTabsOpeningControl" : {
       "numberOfContainersInGroup": 3,
-      "containersInGroupOpeningInterval": 500,
-      "groupsOpeningInterval": 1000
+      "containersInGroupOpeningInterval": 1000,
+      "groupsOpeningInterval": 500
     }
   }
 }

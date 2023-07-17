@@ -1,9 +1,4 @@
-// import { DEFAULT_CONFIG } from './defaultConfig';
-
-// console.log(' DEFAULT_CONFIG', DEFAULT_CONFIG);
-
-// TODO Try to getting this obj from separate file with settings (spec/settings.md)
-let globalConfig = {
+const DEFAULT_CONFIG = {
   "version": "0.2-SNAPSHOT",
   "updatedOn": "Tue Jul 11 2023 19:52:49 GMT+0300 (Moscow Standard Time)",
   "settings": {
@@ -13,19 +8,21 @@ let globalConfig = {
         "shortcut": "Ctrl+Alt+L",
       },
     ],
-    "containerTabsOpeningControl" : {
+    "containerTabsOpeningControl": {
       "numberOfContainersInGroup": 3,
       "containersInGroupOpeningInterval": 1000,
       "groupsOpeningInterval": 500,
     },
   },
 };
+
+let linkyConfig = DEFAULT_CONFIG;
 const LINKY_ADD_ON_CONFIG = 'LINKY_ADD_ON_CONFIG';
 
 // Set config values to storage when open add-on first time
 browser.storage.local.get(LINKY_ADD_ON_CONFIG).then((data) => {
   if (!data.length) {
-    browser.storage.local.set({ LINKY_ADD_ON_CONFIG: JSON.stringify(globalConfig) });
+    browser.storage.local.set({ LINKY_ADD_ON_CONFIG: JSON.stringify(DEFAULT_CONFIG) });
   }
 }).catch((error) => console.error(error));
 
@@ -74,7 +71,7 @@ browser.menus.create({
 });
 
 function openContainersWithDelay(tab) {
-  const delaySettings = globalConfig.settings.containerTabsOpeningControl;
+  const delaySettings = linkyConfig.settings.containerTabsOpeningControl;
   openCurrentTabInAvailableContainers(
     tab.url,
     tab.cookieStoreId,
@@ -101,7 +98,7 @@ browser.browserAction.onClicked.addListener((tab, OnClickData) => {
 });
 
 function handleMessage(request, sender, sendResponse) {
-  globalConfig = request;
+  linkyConfig = request;
   sendResponse({ response: 'Response from background script' });
 }
 
