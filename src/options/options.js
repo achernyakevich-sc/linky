@@ -16,6 +16,8 @@ const DEFAULT_CONFIG = {
   },
 };
 
+const LINKY_ADD_ON_CONFIG = 'LINKY_ADD_ON_CONFIG';
+
 /*
 Default settings for shortcuts and delays - need for moment when
 user insert incorrect values on options page
@@ -66,7 +68,7 @@ function updateGlobalConfig(configJson) {
 
 // Save settings
 function saveSettings(configJson) {
-  browser.storage.local.set({ config: JSON.stringify(globalConfig) }).then(
+  browser.storage.local.set({ LINKY_ADD_ON_CONFIG: JSON.stringify(globalConfig) }).then(
     updateGlobalConfig(configJson),
     handleError,
   );
@@ -323,10 +325,10 @@ function setShortCutsOnLoadPage(shortcutsSettings) {
   }
 }
 
-browser.storage.local.get('config').then((data) => {
-  const delaySettings = JSON.parse(data.config).settings.containerTabsOpeningControl;
-  const shortcutsSettings = JSON.parse(data.config).settings.shortcuts;
-  saveSettings(JSON.parse(data.config));
+browser.storage.local.get(LINKY_ADD_ON_CONFIG).then((data) => {
+  const delaySettings = JSON.parse(data.LINKY_ADD_ON_CONFIG).settings.containerTabsOpeningControl;
+  const shortcutsSettings = JSON.parse(data.LINKY_ADD_ON_CONFIG).settings.shortcuts;
+  saveSettings(JSON.parse(data.LINKY_ADD_ON_CONFIG));
   setDelaySettingsOnLoadOptionPage(delaySettings);
   setShortCutsOnLoadPage(shortcutsSettings);
 }).catch((error) => console.error(error));

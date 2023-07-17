@@ -1,3 +1,7 @@
+// import { DEFAULT_CONFIG } from './defaultConfig';
+
+// console.log(' DEFAULT_CONFIG', DEFAULT_CONFIG);
+
 // TODO Try to getting this obj from separate file with settings (spec/settings.md)
 let globalConfig = {
   "version": "0.2-SNAPSHOT",
@@ -16,11 +20,12 @@ let globalConfig = {
     },
   },
 };
+const LINKY_ADD_ON_CONFIG = 'LINKY_ADD_ON_CONFIG';
 
 // Set config values to storage when open add-on first time
-browser.storage.local.get('config').then((data) => {
+browser.storage.local.get(LINKY_ADD_ON_CONFIG).then((data) => {
   if (!data.length) {
-    browser.storage.local.set({ config: JSON.stringify(globalConfig) });
+    browser.storage.local.set({ LINKY_ADD_ON_CONFIG: JSON.stringify(globalConfig) });
   }
 }).catch((error) => console.error(error));
 
