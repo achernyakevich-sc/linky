@@ -1,36 +1,17 @@
-const DEFAULT_CONFIG = {
-  "version": "0.2-SNAPSHOT",
-  "updatedOn": "Tue Jul 11 2023 19:52:49 GMT+0300 (Moscow Standard Time)",
-  "settings": {
-    "shortcuts": [
-      {
-        "id": "_execute_browser_action",
-        "shortcut": "Ctrl+Alt+L",
-      },
-    ],
-    "containerTabsOpeningControl": {
-      "numberOfContainersInGroup": 3,
-      "containersInGroupOpeningInterval": 1000,
-      "groupsOpeningInterval": 500,
-    },
-  },
-};
-
+let bkg = browser.extension.getBackgroundPage();
+let linkyConfig = bkg.DEFAULT_CONFIG;
 const LINKY_ADD_ON_CONFIG = 'LINKY_ADD_ON_CONFIG';
-
 /*
 Default settings for shortcuts and delays - need for moment when
 user insert incorrect values on options page
 */
-const defaultShortCutsArr = DEFAULT_CONFIG.settings.shortcuts;
-const defaultContainerTabsOpeningControl = DEFAULT_CONFIG.settings.containerTabsOpeningControl;
+const defaultShortCutsArr = bkg.DEFAULT_CONFIG.settings.shortcuts;
+const defaultContainerTabsOpeningControl = bkg.DEFAULT_CONFIG.settings.containerTabsOpeningControl;
 const settingsDelayMap = {
   'number-of-containers-in-group': 'numberOfContainersInGroup',
   'containers-in-group-opening-interval': 'containersInGroupOpeningInterval',
   'groups-opening-interval': 'groupsOpeningInterval',
 };
-
-let linkyConfig = DEFAULT_CONFIG;
 
 function handleError(error) {
   console.error(error);
