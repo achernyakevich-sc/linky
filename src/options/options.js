@@ -1,16 +1,11 @@
 let bkg = browser.extension.getBackgroundPage();
-let linkyConfig = bkg.DEFAULT_CONFIG;
+let linkyConfig;
 const LINKY_ADD_ON_CONFIG = 'LINKY_ADD_ON_CONFIG';
-/*
-Default settings for shortcuts and delays - need for moment when
-user insert incorrect values on options page
-*/
-const defaultShortCutsArr = bkg.DEFAULT_CONFIG.settings.shortcuts;
-const defaultContainerTabsOpeningControl = bkg.DEFAULT_CONFIG.settings.containerTabsOpeningControl;
 
 function handleError(error) {
   console.error(error);
 }
+
 function handleResponse(message) {
   console.log(`Message from the background script: ${message.response}`);
 }
@@ -21,15 +16,10 @@ function notifyBackgroundPage(e, config) {
   sending.then(handleResponse, handleError);
 }
 
-// Update global config variable
-function updateLinkyConfig(configJson) {
-  linkyConfig = configJson;
-}
-
 // Save settings
 function saveSettings(configJson) {
   browser.storage.local.set({ LINKY_ADD_ON_CONFIG: JSON.stringify(linkyConfig) }).then(
-    updateLinkyConfig(configJson),
+    linkyConfig = configJson,
     handleError,
   );
 }
@@ -85,7 +75,7 @@ shortcutResetBtnArray.forEach((item) => {
   const currentId = item.id.replace('_reset_btn', '');
   const currentInput = document.getElementById(currentId);
   const currentError = document.getElementById(`${currentId}_error`);
-  const getDefaultShortCutsById = defaultShortCutsArr.find((el) => el.id === currentId);
+  const getDefaultShortCutsById = bkg.DEFAULT_CONFIG.settings.shortcuts.find((el) => el.id === currentId);
   item.addEventListener('click', () => {
     currentInput.value = getDefaultShortCutsById.shortcut;
     updateBrowserCommands(currentId, currentInput.value);
@@ -247,7 +237,7 @@ function handleBlur(e) {
   const itemId = e.target.id;
   const errorElement = document.getElementById(`${itemId}_error`);
   if (e.target.value === '') {
-    e.target.value = defaultContainerTabsOpeningControl[itemId];
+    e.target.value = bkg.DEFAULT_CONFIG.settings.containerTabsOpeningControl[itemId];
     errorElement.innerText = '';
   } else {
     const updatedConfig = linkyConfig;
@@ -285,9 +275,21 @@ function setShortCutsOnLoadPage(shortcutsSettings) {
 }
 
 browser.storage.local.get(LINKY_ADD_ON_CONFIG).then((data) => {
-  const delaySettings = JSON.parse(data.LINKY_ADD_ON_CONFIG).settings.containerTabsOpeningControl;
-  const shortcutsSettings = JSON.parse(data.LINKY_ADD_ON_CONFIG).settings.shortcuts;
-  saveSettings(JSON.parse(data.LINKY_ADD_ON_CONFIG));
-  setDelaySettingsOnLoadOptionPage(delaySettings);
-  setShortCutsOnLoadPage(shortcutsSettings);
+  if (Object.keys(data).length !== 0) {
+    linkyConfig = JSON.parse(data.LINKY_ADD_ON_CONFIG);
+    const delaySettings = JSON.parse(data.LINKY_ADD_ON_CONFIG).settings.containerTabsOpeningControl;
+    const shortcutsSettings = JSON.parse(data.LINKY_ADD_ON_CONFIG).settings.shortcuts;
+    saveSettings(JSON.parse(data.LINKY_ADD_ON_CONFIG));
+    setDelaySettingsOnLoadOptionPage(delaySettings);
+    setShortCutsOnLoadPage(shortcutsSettings);
+  } else {
+    browser.storage.local.set({ LINKY_ADD_ON_CONFIG: JSON.stringify(bkg.DEFAULT_CONFIG) }).then(() => {
+      linkyConfig = bkg.DEFAULT_CONFIG;
+      const delaySettings = linkyConfig.settings.containerTabsOpeningControl;
+      const shortcutsSettings = linkyConfig.settings.shortcuts;
+      saveSettings(linkyConfig);
+      setDelaySettingsOnLoadOptionPage(delaySettings);
+      setShortCutsOnLoadPage(shortcutsSettings);
+    });
+  }
 }).catch((error) => console.error(error));
