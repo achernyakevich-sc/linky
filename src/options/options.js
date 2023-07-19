@@ -7,11 +7,6 @@ user insert incorrect values on options page
 */
 const defaultShortCutsArr = bkg.DEFAULT_CONFIG.settings.shortcuts;
 const defaultContainerTabsOpeningControl = bkg.DEFAULT_CONFIG.settings.containerTabsOpeningControl;
-const settingsDelayMap = {
-  'number-of-containers-in-group': 'numberOfContainersInGroup',
-  'containers-in-group-opening-interval': 'containersInGroupOpeningInterval',
-  'groups-opening-interval': 'groupsOpeningInterval',
-};
 
 function handleError(error) {
   console.error(error);
@@ -50,9 +45,9 @@ const shortcutClearBtnArray = document.querySelectorAll('.clear-button');
 const shortcutResetBtnArray = document.querySelectorAll('.reset-button');
 const inputsShortcutsArr = document.querySelectorAll('.shortcuts-input');
 const inputsDelaySettingsArr = document.querySelectorAll('.delay-settings-input');
-const numberContainersInGroupInput = document.getElementById('number-of-containers-in-group');
-const intervalBetweenContainersInput = document.getElementById('containers-in-group-opening-interval');
-const intervalBetweenGroupsInput = document.getElementById('groups-opening-interval');
+const numberContainersInGroupInput = document.getElementById('numberOfContainersInGroup');
+const intervalBetweenContainersInput = document.getElementById('containersInGroupOpeningInterval');
+const intervalBetweenGroupsInput = document.getElementById('groupsOpeningInterval');
 
 /*
 Generic error logger.
@@ -242,7 +237,7 @@ function handleInput(e) {
   const itemId = e.target.id;
   if (validationDelayOptions(e.target, e)) {
     const updatedConfig = linkyConfig;
-    updatedConfig.settings.containerTabsOpeningControl[settingsDelayMap[itemId]] = Number(e.target.value);
+    updatedConfig.settings.containerTabsOpeningControl[itemId] = Number(e.target.value);
     saveSettings(updatedConfig);
     notifyBackgroundPage(e, updatedConfig);
   }
@@ -252,12 +247,11 @@ function handleBlur(e) {
   const itemId = e.target.id;
   const errorElement = document.getElementById(`${itemId}_error`);
   if (e.target.value === '') {
-    e.target.value = defaultContainerTabsOpeningControl[settingsDelayMap[itemId]];
-    // delaySettings[settingsDelayMap[itemId]] = e.target.value;
+    e.target.value = defaultContainerTabsOpeningControl[itemId];
     errorElement.innerText = '';
   } else {
     const updatedConfig = linkyConfig;
-    updatedConfig.settings.containerTabsOpeningControl[settingsDelayMap[itemId]] = Number(e.target.value);
+    updatedConfig.settings.containerTabsOpeningControl[itemId] = Number(e.target.value);
     saveSettings(updatedConfig);
     notifyBackgroundPage(e, updatedConfig);
   }
