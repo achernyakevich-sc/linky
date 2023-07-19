@@ -1,6 +1,6 @@
 let bkg = browser.extension.getBackgroundPage();
 let linkyConfig;
-const LINKY_ADD_ON_CONFIG = 'LINKY_ADD_ON_CONFIG';
+const LINKY_ADD_ON_CONFIG_STORAGE_KEY = bkg.LINKY_ADD_ON_CONFIG_STORAGE_KEY;
 
 function handleError(error) {
   console.error(error);
@@ -18,7 +18,7 @@ function notifyBackgroundPage(e, config) {
 
 // Save settings
 function saveSettings(configJson) {
-  browser.storage.local.set({ LINKY_ADD_ON_CONFIG: JSON.stringify(linkyConfig) }).then(
+  browser.storage.local.set({ [LINKY_ADD_ON_CONFIG_STORAGE_KEY]: JSON.stringify(linkyConfig) }).then(
     linkyConfig = configJson,
     handleError,
   );
@@ -274,16 +274,16 @@ function setShortCutsOnLoadPage(shortcutsSettings) {
   }
 }
 
-browser.storage.local.get(LINKY_ADD_ON_CONFIG).then((data) => {
+browser.storage.local.get(LINKY_ADD_ON_CONFIG_STORAGE_KEY).then((data) => {
   if (Object.keys(data).length !== 0) {
-    linkyConfig = JSON.parse(data.LINKY_ADD_ON_CONFIG);
-    const delaySettings = JSON.parse(data.LINKY_ADD_ON_CONFIG).settings.containerTabsOpeningControl;
-    const shortcutsSettings = JSON.parse(data.LINKY_ADD_ON_CONFIG).settings.shortcuts;
-    saveSettings(JSON.parse(data.LINKY_ADD_ON_CONFIG));
+    linkyConfig = JSON.parse(data[`${LINKY_ADD_ON_CONFIG_STORAGE_KEY}`]);
+    const delaySettings = JSON.parse(data[`${LINKY_ADD_ON_CONFIG_STORAGE_KEY}`]).settings.containerTabsOpeningControl;
+    const shortcutsSettings = JSON.parse(data[`${LINKY_ADD_ON_CONFIG_STORAGE_KEY}`]).settings.shortcuts;
+    saveSettings(JSON.parse(data[`${LINKY_ADD_ON_CONFIG_STORAGE_KEY}`]));
     setDelaySettingsOnLoadOptionPage(delaySettings);
     setShortCutsOnLoadPage(shortcutsSettings);
   } else {
-    browser.storage.local.set({ LINKY_ADD_ON_CONFIG: JSON.stringify(bkg.DEFAULT_CONFIG) }).then(() => {
+    browser.storage.local.set({ [LINKY_ADD_ON_CONFIG_STORAGE_KEY]: JSON.stringify(bkg.DEFAULT_CONFIG) }).then(() => {
       linkyConfig = bkg.DEFAULT_CONFIG;
       const delaySettings = linkyConfig.settings.containerTabsOpeningControl;
       const shortcutsSettings = linkyConfig.settings.shortcuts;
