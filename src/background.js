@@ -34,19 +34,18 @@ browser.storage.local.get(LINKY_ADD_ON_CONFIG).then((data) => {
 /*
 Open current tab in available Containers.
 */
-async function openCurrentTabInAvailableContainers(
-  currentTabUrl,
-  currentCookieStoreId,
-  numberContainersInGroup,
-  delayToOpenBetweenGroupsMSeconds,
-  delayToOpenBetweenContainersMSeconds,
-) {
+async function openCurrentTabInAvailableContainers(tab) {
+  const currentTabUrl = tab.url;
+  const currentCookieStoreId = tab.cookieStoreId;
+  const numberContainersInGroup = linkyConfig.settings.containerTabsOpeningControl.numberOfContainersInGroup;
+  const delayToOpenBetweenGroupsMSeconds = linkyConfig.settings.containerTabsOpeningControl.groupsOpeningInterval;
+  const delayToOpenBetweenContainersMSeconds = linkyConfig.settings.containerTabsOpeningControl.containersInGroupOpeningInterval;
+  const containers = (await browser.contextualIdentities.query({})).filter((container) => container.cookieStoreId !== currentCookieStoreId);
+
   // Preparing array with groups of containers
-  const containers = await browser.contextualIdentities.query({});
-  const otherContainers = containers.filter(container => container.cookieStoreId !== currentCookieStoreId);
   const containerGroups = [];
-  for (let i = 0; i < otherContainers.length; i += numberContainersInGroup) {
-    containerGroups.push(otherContainers.slice(i, i + numberContainersInGroup));
+  for (let i = 0; i < containers.length; i += numberContainersInGroup) {
+    containerGroups.push(containers.slice(i, i + numberContainersInGroup));
   }
 
   let totalDelay = 0;
@@ -75,23 +74,12 @@ browser.menus.create({
   contexts: ['tab'],
 });
 
-function openContainersWithDelay(tab) {
-  const delaySettings = linkyConfig.settings.containerTabsOpeningControl;
-  openCurrentTabInAvailableContainers(
-    tab.url,
-    tab.cookieStoreId,
-    delaySettings.numberOfContainersInGroup,
-    delaySettings.groupsOpeningInterval,
-    delaySettings.containersInGroupOpeningInterval,
-  );
-}
-
 /*
 The click event listener, where we perform the appropriate action
 when extension menu item ('Open in available Containers') was clicked.
 */
 browser.menus.onClicked.addListener((info, tab) => {
-  openContainersWithDelay(tab);
+  openCurrentTabInAvailableContainers(tab);
 });
 
 /*
@@ -99,7 +87,7 @@ The click event listener, where we perform the appropriate action
 when extension icon was clicked.
 */
 browser.browserAction.onClicked.addListener((tab, OnClickData) => {
-  openContainersWithDelay(tab);
+  openCurrentTabInAvailableContainers(tab);
 });
 
 function handleMessage(request, sender, sendResponse) {
