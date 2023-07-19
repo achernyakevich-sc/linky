@@ -16,13 +16,18 @@ var DEFAULT_CONFIG = {
   },
 };
 
-let linkyConfig = DEFAULT_CONFIG;
+let linkyConfig;
+// TODO: ranmed key variable -> LINKY_ADD_ON_CONFIG_STORAGE_KEY
 const LINKY_ADD_ON_CONFIG = 'LINKY_ADD_ON_CONFIG';
 
 // Set config values to storage when open add-on first time
 browser.storage.local.get(LINKY_ADD_ON_CONFIG).then((data) => {
-  if (!data.length) {
-    browser.storage.local.set({ LINKY_ADD_ON_CONFIG: JSON.stringify(DEFAULT_CONFIG) });
+  if (data.length) {
+    linkyConfig = JSON.parse(data.LINKY_ADD_ON_CONFIG);
+  } else {
+    browser.storage.local.set({ LINKY_ADD_ON_CONFIG: JSON.stringify(DEFAULT_CONFIG) }).then(() => {
+      linkyConfig = DEFAULT_CONFIG;
+    });
   }
 }).catch((error) => console.error(error));
 
