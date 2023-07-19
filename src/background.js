@@ -49,10 +49,10 @@ async function openCurrentTabInAvailableContainers(tab) {
   }
 
   let totalDelay = 0;
-  for (let j = 0; j < containerGroups.length; j++) {
-    const currentGroup = containerGroups[j];
-    for (let k = 0; k < currentGroup.length; k++) {
-      const currentContainer = currentGroup[k];
+  for (let i = 0; i < containerGroups.length; i++) {
+    const currentGroup = containerGroups[i];
+    for (let j = 0; j < currentGroup.length; j++) {
+      const currentContainer = currentGroup[j];
       setTimeout(() => {
         browser.tabs.create({
           cookieStoreId: currentContainer.cookieStoreId,
