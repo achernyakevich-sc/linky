@@ -63,10 +63,16 @@ shortcutClearBtnArray.forEach((item) => {
   const currentId = item.id.replace('_clear_btn', '');
   const currentInput = document.getElementById(currentId);
   const currentError = document.getElementById(`${currentId}_error`);
-  item.addEventListener('click', () => {
+  const updatedConfig = linkyConfig;
+  item.addEventListener('click', (e) => {
     currentInput.value = '';
-    updateBrowserCommands(currentId, '');
     currentError.innerText = '';
+    updateBrowserCommands(currentId, '');
+    updatedConfig.settings.shortcuts
+      .filter((el) => el.id === e.target.id.replace('_clear_btn', ''))
+      .forEach((elem) => (elem.shortcut = ''));
+    saveSettings(updatedConfig);
+    notifyBackgroundPage(e, updatedConfig);
   });
 });
 
@@ -76,10 +82,18 @@ shortcutResetBtnArray.forEach((item) => {
   const currentInput = document.getElementById(currentId);
   const currentError = document.getElementById(`${currentId}_error`);
   const getDefaultShortCutsById = bkg.DEFAULT_CONFIG.settings.shortcuts.find((el) => el.id === currentId);
-  item.addEventListener('click', () => {
+  const updatedConfig = linkyConfig;
+  item.addEventListener('click', (e) => {
     currentInput.value = getDefaultShortCutsById.shortcut;
-    updateBrowserCommands(currentId, currentInput.value);
     currentError.innerText = '';
+    updateBrowserCommands(currentId, currentInput.value);
+    updatedConfig.settings.shortcuts
+      .filter((el) => el.id === e.target.id.replace('_reset_btn', ''))
+      .forEach((elem) => {
+        elem.shortcut = getDefaultShortCutsById.shortcut;
+      });
+    saveSettings(updatedConfig);
+    notifyBackgroundPage(e, updatedConfig);
   });
 });
 
