@@ -63,8 +63,8 @@ shortcutClearBtnArray.forEach((item) => {
   const currentId = item.id.replace('_clear_btn', '');
   const currentInput = document.getElementById(currentId);
   const currentError = document.getElementById(`${currentId}_error`);
-  const updatedConfig = linkyConfig;
   item.addEventListener('click', (e) => {
+    const updatedConfig = linkyConfig;
     currentInput.value = '';
     currentError.innerText = '';
     updateBrowserCommands(currentId, '');
@@ -82,8 +82,8 @@ shortcutResetBtnArray.forEach((item) => {
   const currentInput = document.getElementById(currentId);
   const currentError = document.getElementById(`${currentId}_error`);
   const getDefaultShortCutsById = bkg.DEFAULT_CONFIG.settings.shortcuts.find((el) => el.id === currentId);
-  const updatedConfig = linkyConfig;
   item.addEventListener('click', (e) => {
+    const updatedConfig = linkyConfig;
     currentInput.value = getDefaultShortCutsById.shortcut;
     currentError.innerText = '';
     updateBrowserCommands(currentId, currentInput.value);
