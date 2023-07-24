@@ -11,16 +11,13 @@ function handleResponse(message) {
   console.log(`Message from the background script: ${message.response}`);
 }
 
-function notifyBackgroundPage(e, config) {
-  console.log('config in notifyBackgroundPage options.js', config);
-  const sending = browser.runtime.sendMessage(config);
-  sending.then(handleResponse, handleError);
-}
-
-// Save settings
 function saveSettings(configJson) {
   browser.storage.local.set({ [LINKY_ADD_ON_CONFIG_STORAGE_KEY]: JSON.stringify(linkyConfig) }).then(
-    linkyConfig = configJson,
+    () => {
+      linkyConfig = configJson;
+      const sending = browser.runtime.sendMessage(configJson);
+      sending.then(handleResponse, handleError);
+    },
     handleError,
   );
 }
@@ -72,7 +69,6 @@ shortcutClearBtnArray.forEach((item) => {
       .filter((el) => el.id === e.target.id.replace('_clear_btn', ''))
       .forEach((elem) => (elem.shortcut = ''));
     saveSettings(linkyConfig);
-    notifyBackgroundPage(e, linkyConfig);
   });
 });
 
@@ -92,7 +88,6 @@ shortcutResetBtnArray.forEach((item) => {
         elem.shortcut = getDefaultShortCutsById.shortcut;
       });
     saveSettings(linkyConfig);
-    notifyBackgroundPage(e, linkyConfig);
   });
 });
 
@@ -210,7 +205,7 @@ function handleKeyDown(e) {
       .filter((el) => el.id === e.target.id)
       .forEach((elem) => (elem.shortcut = e.target.value));
     saveSettings(linkyConfig);
-    notifyBackgroundPage(e, linkyConfig);
+    // notifyBackgroundPage(e, linkyConfig);
   }
 }
 
@@ -230,7 +225,6 @@ function handleChangesDelaysOptions(e) {
   } else {
     linkyConfig.settings.containerTabsOpeningControl[itemId] = Number(e.target.value);
     saveSettings(linkyConfig);
-    notifyBackgroundPage(e, linkyConfig);
   }
 }
 
