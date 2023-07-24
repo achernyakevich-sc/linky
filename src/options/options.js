@@ -1,6 +1,7 @@
 let bkg = browser.extension.getBackgroundPage();
-let linkyConfig;
 const LINKY_ADD_ON_CONFIG_STORAGE_KEY = bkg.LINKY_ADD_ON_CONFIG_STORAGE_KEY;
+
+let linkyConfig;
 
 function handleError(error) {
   console.error(error);
@@ -64,15 +65,14 @@ shortcutClearBtnArray.forEach((item) => {
   const currentInput = document.getElementById(currentId);
   const currentError = document.getElementById(`${currentId}_error`);
   item.addEventListener('click', (e) => {
-    const updatedConfig = linkyConfig;
     currentInput.value = '';
     currentError.innerText = '';
     updateBrowserCommands(currentId, '');
-    updatedConfig.settings.shortcuts
+    linkyConfig.settings.shortcuts
       .filter((el) => el.id === e.target.id.replace('_clear_btn', ''))
       .forEach((elem) => (elem.shortcut = ''));
-    saveSettings(updatedConfig);
-    notifyBackgroundPage(e, updatedConfig);
+    saveSettings(linkyConfig);
+    notifyBackgroundPage(e, linkyConfig);
   });
 });
 
@@ -83,17 +83,16 @@ shortcutResetBtnArray.forEach((item) => {
   const currentError = document.getElementById(`${currentId}_error`);
   const getDefaultShortCutsById = bkg.DEFAULT_CONFIG.settings.shortcuts.find((el) => el.id === currentId);
   item.addEventListener('click', (e) => {
-    const updatedConfig = linkyConfig;
     currentInput.value = getDefaultShortCutsById.shortcut;
     currentError.innerText = '';
     updateBrowserCommands(currentId, currentInput.value);
-    updatedConfig.settings.shortcuts
+    linkyConfig.settings.shortcuts
       .filter((el) => el.id === e.target.id.replace('_reset_btn', ''))
       .forEach((elem) => {
         elem.shortcut = getDefaultShortCutsById.shortcut;
       });
-    saveSettings(updatedConfig);
-    notifyBackgroundPage(e, updatedConfig);
+    saveSettings(linkyConfig);
+    notifyBackgroundPage(e, linkyConfig);
   });
 });
 
@@ -220,12 +219,11 @@ function handleKeyDown(e) {
   const isValidShortcut = errorElement.innerText === '';
   if (isValidShortcut) {
     updateBrowserCommands(e.target.id, value);
-    const updatedConfig = linkyConfig;
-    updatedConfig.settings.shortcuts
+    linkyConfig.settings.shortcuts
       .filter((el) => el.id === e.target.id)
       .forEach((elem) => (elem.shortcut = e.target.value));
-    saveSettings(updatedConfig);
-    notifyBackgroundPage(e, updatedConfig);
+    saveSettings(linkyConfig);
+    notifyBackgroundPage(e, linkyConfig);
   }
 }
 
@@ -240,10 +238,9 @@ inputsShortcutsArr.forEach((item) => {
 function handleInput(e) {
   const itemId = e.target.id;
   if (validationDelayOptions(e.target, e)) {
-    const updatedConfig = linkyConfig;
-    updatedConfig.settings.containerTabsOpeningControl[itemId] = Number(e.target.value);
-    saveSettings(updatedConfig);
-    notifyBackgroundPage(e, updatedConfig);
+    linkyConfig.settings.containerTabsOpeningControl[itemId] = Number(e.target.value);
+    saveSettings(linkyConfig);
+    notifyBackgroundPage(e, linkyConfig);
   }
 }
 
@@ -254,10 +251,9 @@ function handleBlur(e) {
     e.target.value = bkg.DEFAULT_CONFIG.settings.containerTabsOpeningControl[itemId];
     errorElement.innerText = '';
   } else {
-    const updatedConfig = linkyConfig;
-    updatedConfig.settings.containerTabsOpeningControl[itemId] = Number(e.target.value);
-    saveSettings(updatedConfig);
-    notifyBackgroundPage(e, updatedConfig);
+    linkyConfig.settings.containerTabsOpeningControl[itemId] = Number(e.target.value);
+    saveSettings(linkyConfig);
+    notifyBackgroundPage(e, linkyConfig);
   }
 }
 
