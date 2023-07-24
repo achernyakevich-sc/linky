@@ -205,7 +205,6 @@ function handleKeyDown(e) {
       .filter((el) => el.id === e.target.id)
       .forEach((elem) => (elem.shortcut = e.target.value));
     saveSettings(linkyConfig);
-    // notifyBackgroundPage(e, linkyConfig);
   }
 }
 
