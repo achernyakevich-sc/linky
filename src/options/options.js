@@ -253,13 +253,10 @@ inputsDelaySettingsArr.forEach((item) => {
   item.addEventListener('change', handleChangesDelaysOptions);
 });
 
-function setDelaySettingsOnLoadOptionPage(containerTabsOpeningControl) {
-  numberContainersInGroupInput.value = containerTabsOpeningControl.numberOfContainersInGroup;
-  intervalBetweenContainersInput.value = containerTabsOpeningControl.containersInGroupOpeningInterval;
-  intervalBetweenGroupsInput.value = containerTabsOpeningControl.groupsOpeningInterval;
-}
-
-function setShortCutsOnLoadPage(shortcutsSettings) {
+function loadDefaultConfigToOptionsPage(shortcutsSettings, delaySettings) {
+  numberContainersInGroupInput.value = delaySettings.numberOfContainersInGroup;
+  intervalBetweenContainersInput.value = delaySettings.containersInGroupOpeningInterval;
+  intervalBetweenGroupsInput.value = delaySettings.groupsOpeningInterval;
   if (shortcutsSettings.length) {
     inputsShortcutsArr.forEach((item) => {
       const getShortcutElement = shortcutsSettings.find((el) => el.id === item.id);
@@ -279,17 +276,15 @@ browser.storage.local.get(LINKY_ADD_ON_CONFIG_STORAGE_KEY).then((data) => {
     linkyConfig = JSON.parse(data[`${LINKY_ADD_ON_CONFIG_STORAGE_KEY}`]);
     const delaySettings = JSON.parse(data[`${LINKY_ADD_ON_CONFIG_STORAGE_KEY}`]).settings.containerTabsOpeningControl;
     const shortcutsSettings = JSON.parse(data[`${LINKY_ADD_ON_CONFIG_STORAGE_KEY}`]).settings.shortcuts;
+    loadDefaultConfigToOptionsPage(shortcutsSettings, delaySettings);
     saveSettings(JSON.parse(data[`${LINKY_ADD_ON_CONFIG_STORAGE_KEY}`]));
-    setDelaySettingsOnLoadOptionPage(delaySettings);
-    setShortCutsOnLoadPage(shortcutsSettings);
   } else {
     browser.storage.local.set({ [LINKY_ADD_ON_CONFIG_STORAGE_KEY]: JSON.stringify(bkg.DEFAULT_CONFIG) }).then(() => {
       linkyConfig = bkg.DEFAULT_CONFIG;
       const delaySettings = linkyConfig.settings.containerTabsOpeningControl;
       const shortcutsSettings = linkyConfig.settings.shortcuts;
+      loadDefaultConfigToOptionsPage(shortcutsSettings, delaySettings);
       saveSettings(linkyConfig);
-      setDelaySettingsOnLoadOptionPage(delaySettings);
-      setShortCutsOnLoadPage(shortcutsSettings);
     });
   }
 }).catch((error) => console.error(error));
