@@ -16,6 +16,7 @@ var DEFAULT_CONFIG = {
   },
 };
 var LINKY_ADD_ON_CONFIG_STORAGE_KEY = 'LINKY_ADD_ON_CONFIG';
+
 let linkyConfig;
 
 // Set config values to storage when open add-on first time
@@ -33,12 +34,8 @@ browser.storage.local.get(LINKY_ADD_ON_CONFIG_STORAGE_KEY).then((data) => {
 Open current tab in available Containers.
 */
 async function openCurrentTabInAvailableContainers(tab) {
-  const currentTabUrl = tab.url;
-  const currentCookieStoreId = tab.cookieStoreId;
   const numberContainersInGroup = linkyConfig.settings.containerTabsOpeningControl.numberOfContainersInGroup;
-  const delayToOpenBetweenGroupsMSeconds = linkyConfig.settings.containerTabsOpeningControl.groupsOpeningInterval;
-  const delayToOpenBetweenContainersMSeconds = linkyConfig.settings.containerTabsOpeningControl.containersInGroupOpeningInterval;
-  const containers = (await browser.contextualIdentities.query({})).filter((container) => container.cookieStoreId !== currentCookieStoreId);
+  const containers = (await browser.contextualIdentities.query({})).filter((container) => container.cookieStoreId !== tab.cookieStoreId);
 
   // Preparing array with groups of containers
   const containerGroups = [];
@@ -54,12 +51,12 @@ async function openCurrentTabInAvailableContainers(tab) {
       setTimeout(() => {
         browser.tabs.create({
           cookieStoreId: currentContainer.cookieStoreId,
-          url: currentTabUrl,
+          url: tab.url,
         });
       }, totalDelay);
-      totalDelay += delayToOpenBetweenContainersMSeconds;
+      totalDelay += linkyConfig.settings.containerTabsOpeningControl.containersInGroupOpeningInterval;
     }
-    totalDelay += delayToOpenBetweenGroupsMSeconds;
+    totalDelay += linkyConfig.settings.containerTabsOpeningControl.groupsOpeningInterval;
   }
 }
 
