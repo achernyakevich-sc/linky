@@ -34,30 +34,25 @@ browser.storage.local.get(LINKY_ADD_ON_CONFIG_STORAGE_KEY).then((data) => {
 Open current tab in available Containers.
 */
 async function openCurrentTabInAvailableContainers(tab) {
-  const numberContainersInGroup = linkyConfig.settings.containerTabsOpeningControl.numberOfContainersInGroup;
   const containers = (await browser.contextualIdentities.query({})).filter((container) => container.cookieStoreId !== tab.cookieStoreId);
-
-  // Preparing array with groups of containers
-  const containerGroups = [];
-  for (let i = 0; i < containers.length; i += numberContainersInGroup) {
-    containerGroups.push(containers.slice(i, i + numberContainersInGroup));
-  }
-
+  const numberContainersInGroup = linkyConfig.settings.containerTabsOpeningControl.numberOfContainersInGroup;
   let totalDelay = 0;
-  for (let i = 0; i < containerGroups.length; i++) {
-    const currentGroup = containerGroups[i];
-    for (let j = 0; j < currentGroup.length; j++) {
-      const currentContainer = currentGroup[j];
-      setTimeout(() => {
-        browser.tabs.create({
-          cookieStoreId: currentContainer.cookieStoreId,
-          url: tab.url,
-        });
-      }, totalDelay);
-      totalDelay += linkyConfig.settings.containerTabsOpeningControl.containersInGroupOpeningInterval;
+
+  containers.forEach((container, index) => {
+    const isNewGroup = (index !== 0 && (index + 1) % numberContainersInGroup === 0);
+    if (isNewGroup) {
+      totalDelay += linkyConfig.settings.containerTabsOpeningControl.groupsOpeningInterval;
     }
-    totalDelay += linkyConfig.settings.containerTabsOpeningControl.groupsOpeningInterval;
-  }
+
+    setTimeout(() => {
+      browser.tabs.create({
+        cookieStoreId: container.cookieStoreId,
+        url: tab.url,
+      });
+    }, totalDelay);
+
+    totalDelay += linkyConfig.settings.containerTabsOpeningControl.containersInGroupOpeningInterval;
+  });
 }
 
 /*
