@@ -234,17 +234,7 @@ inputsShortcutsArr.forEach((item) => {
   });
 });
 
-// Settings tab Delay options
-function handleInput(e) {
-  const itemId = e.target.id;
-  if (validationDelayOptions(e.target, e)) {
-    linkyConfig.settings.containerTabsOpeningControl[itemId] = Number(e.target.value);
-    saveSettings(linkyConfig);
-    notifyBackgroundPage(e, linkyConfig);
-  }
-}
-
-function handleBlur(e) {
+function handleChangesDelaysOptions(e) {
   const itemId = e.target.id;
   const errorElement = document.getElementById(`${itemId}_error`);
   if (e.target.value === '') {
@@ -259,8 +249,8 @@ function handleBlur(e) {
 
 // Add event listeners to each item using the same functions
 inputsDelaySettingsArr.forEach((item) => {
-  item.addEventListener('input', handleInput);
-  item.addEventListener('blur', handleBlur);
+  item.addEventListener('blur', handleChangesDelaysOptions);
+  item.addEventListener('change', handleChangesDelaysOptions);
 });
 
 function setDelaySettingsOnLoadOptionPage(containerTabsOpeningControl) {
