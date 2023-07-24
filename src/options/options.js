@@ -165,19 +165,6 @@ function showErrorMessage(e) {
   } else if (normalizedKey === '') errorElement.innerText = browser.i18n.getMessage('invalidLetterMessage');
 }
 
-function validationDelayOptions(input, e) {
-  const errorElement = document.getElementById(`${e.target.id}_error`);
-  const inputValue = input.value;
-  if (inputValue === '') {
-    errorElement.innerText = 'Field can\'t be empty and should content number';
-  } else {
-    errorElement.innerText = '';
-  }
-
-  const isValid = errorElement.innerText === '';
-  return isValid;
-}
-
 function displayingInputValue(e) {
   const normalizedKey = normalizeKey(e.key, e.keyCode);
   const ctrlKeyMac = isMac ? 'MacCtrl+' : 'Ctrl+';
