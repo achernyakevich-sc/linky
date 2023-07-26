@@ -15,8 +15,8 @@ Below there is Linky add-on's settings JSON structure and default values.
     ],
     "containerTabsOpeningControl" : {
       "numberOfContainersInGroup": 3,
-      "containersInGroupOpeningInterval": 1000,
-      "groupsOpeningInterval": 500
+      "containersInGroupOpeningInterval": 500,
+      "groupsOpeningInterval": 1000
     }
   }
 }
