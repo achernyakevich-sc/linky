@@ -3,22 +3,19 @@ const LINKY_ADD_ON_CONFIG_STORAGE_KEY = bkg.LINKY_ADD_ON_CONFIG_STORAGE_KEY;
 
 let linkyConfig;
 
-function handleError(error) {
-  console.error(error);
-}
-
-function handleResponse(message) {
-  console.log(`Message from the background script: ${message.response}`);
-}
-
 function saveSettings(configJson) {
   browser.storage.local.set({ [LINKY_ADD_ON_CONFIG_STORAGE_KEY]: JSON.stringify(linkyConfig) }).then(
     () => {
       linkyConfig = configJson;
-      const sending = browser.runtime.sendMessage(configJson);
-      sending.then(handleResponse, handleError);
+      browser.runtime.sendMessage(configJson).then((message) => {
+        console.log(message.response);
+      }, (error) => {
+        console.error(error);
+      });
     },
-    handleError,
+    (error) => {
+      console.error(error);
+    },
   );
 }
 
@@ -36,13 +33,6 @@ const inputsDelaySettingsArr = document.querySelectorAll('.delay-settings-input'
 const numberContainersInGroupInput = document.getElementById('numberOfContainersInGroup');
 const intervalBetweenContainersInput = document.getElementById('containersInGroupOpeningInterval');
 const intervalBetweenGroupsInput = document.getElementById('groupsOpeningInterval');
-
-/*
-Generic error logger.
-*/
-function onError(e) {
-  console.error(e);
-}
 
 function updateBrowserCommands(event, value) {
   browser.commands.update({ name: event, shortcut: value });
@@ -247,7 +237,7 @@ function loadDefaultConfigToOptionsPage(shortcutsSettings, delaySettings) {
       });
     });
   } else {
-    onError();
+    console.error(browser.i18n.getMessage('errorMessageEmptyShortcutsSettings'));
   }
 }
 

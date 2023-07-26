@@ -85,6 +85,10 @@
     },
     "responseMessageFromBackgroundScript": {
         "message": "Response from background script",
-        "description": "Response message that displays in browser console when open options page"
+        "description": "Response message, that displays in browser console in the success result of updating settings on options page"
+    },
+    "errorMessageEmptyShortcutsSettings": {
+        "message": "Shortcuts settings are empty",
+        "description": "Log an error if shortcuts settings are empty"
     }
 }
