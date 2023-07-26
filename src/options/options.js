@@ -1,5 +1,6 @@
 let bkg = browser.extension.getBackgroundPage();
 const LINKY_ADD_ON_CONFIG_STORAGE_KEY = bkg.LINKY_ADD_ON_CONFIG_STORAGE_KEY;
+const DEFAULT_CONFIG = bkg.DEFAULT_CONFIG;
 
 let linkyConfig;
 
@@ -67,7 +68,7 @@ shortcutResetBtnArray.forEach((item) => {
   const currentId = item.id.replace('_reset_btn', '');
   const currentInput = document.getElementById(currentId);
   const currentError = document.getElementById(`${currentId}_error`);
-  const getDefaultShortCutsById = bkg.DEFAULT_CONFIG.settings.shortcuts.find((el) => el.id === currentId);
+  const getDefaultShortCutsById = DEFAULT_CONFIG.settings.shortcuts.find((el) => el.id === currentId);
   item.addEventListener('click', (e) => {
     currentInput.value = getDefaultShortCutsById.shortcut;
     currentError.innerText = '';
@@ -209,7 +210,7 @@ function handleChangesDelaysOptions(e) {
   const itemId = e.target.id;
   const errorElement = document.getElementById(`${itemId}_error`);
   if (e.target.value === '') {
-    e.target.value = bkg.DEFAULT_CONFIG.settings.containerTabsOpeningControl[itemId];
+    e.target.value = DEFAULT_CONFIG.settings.containerTabsOpeningControl[itemId];
     errorElement.innerText = '';
   } else {
     linkyConfig.settings.containerTabsOpeningControl[itemId] = Number(e.target.value);
@@ -249,8 +250,8 @@ browser.storage.local.get(LINKY_ADD_ON_CONFIG_STORAGE_KEY).then((data) => {
     loadDefaultConfigToOptionsPage(shortcutsSettings, delaySettings);
     saveSettings(JSON.parse(data[`${LINKY_ADD_ON_CONFIG_STORAGE_KEY}`]));
   } else {
-    browser.storage.local.set({ [LINKY_ADD_ON_CONFIG_STORAGE_KEY]: JSON.stringify(bkg.DEFAULT_CONFIG) }).then(() => {
-      linkyConfig = bkg.DEFAULT_CONFIG;
+    browser.storage.local.set({ [LINKY_ADD_ON_CONFIG_STORAGE_KEY]: JSON.stringify(DEFAULT_CONFIG) }).then(() => {
+      linkyConfig = DEFAULT_CONFIG;
       const delaySettings = linkyConfig.settings.containerTabsOpeningControl;
       const shortcutsSettings = linkyConfig.settings.shortcuts;
       loadDefaultConfigToOptionsPage(shortcutsSettings, delaySettings);
