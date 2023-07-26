@@ -11,7 +11,7 @@ var DEFAULT_CONFIG = {
     "containerTabsOpeningControl": {
       "numberOfContainersInGroup": 3,
       "containersInGroupOpeningInterval": 500,
-      "groupsOpeningInterval": 2000,
+      "groupsOpeningInterval": 1000,
     },
   },
 };
