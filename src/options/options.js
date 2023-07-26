@@ -1,8 +1,35 @@
 let bkg = browser.extension.getBackgroundPage();
 const LINKY_ADD_ON_CONFIG_STORAGE_KEY = bkg.LINKY_ADD_ON_CONFIG_STORAGE_KEY;
 const DEFAULT_CONFIG = bkg.DEFAULT_CONFIG;
+const sidebarMenuTabs = document.querySelectorAll('input[name="tab-group-1"]');
+const optionsTitle = document.getElementById('options-title');
+const shortcutClearBtnArray = document.querySelectorAll('.clear-button');
+const shortcutResetBtnArray = document.querySelectorAll('.reset-button');
+const inputsShortcutsArr = document.querySelectorAll('.shortcuts-input');
+const inputsDelaySettingsArr = document.querySelectorAll('.delay-settings-input');
+const numberContainersInGroupInput = document.getElementById('numberOfContainersInGroup');
+const intervalBetweenContainersInput = document.getElementById('containersInGroupOpeningInterval');
+const intervalBetweenGroupsInput = document.getElementById('groupsOpeningInterval');
 
 let linkyConfig;
+
+function loadDefaultConfigToOptionsPage(shortcutsSettings, delaySettings) {
+  numberContainersInGroupInput.value = delaySettings.numberOfContainersInGroup;
+  intervalBetweenContainersInput.value = delaySettings.containersInGroupOpeningInterval;
+  intervalBetweenGroupsInput.value = delaySettings.groupsOpeningInterval;
+  if (shortcutsSettings.length) {
+    inputsShortcutsArr.forEach((item) => {
+      const getShortcutElement = shortcutsSettings.find((el) => el.id === item.id);
+      item.value = getShortcutElement.shortcut;
+      browser.commands.update({
+        name: item.id,
+        shortcut: getShortcutElement.shortcut,
+      });
+    });
+  } else {
+    console.error(browser.i18n.getMessage('errorMessageEmptyShortcutsSettings'));
+  }
+}
 
 function saveSettings(configJson) {
   browser.storage.local.set({ [LINKY_ADD_ON_CONFIG_STORAGE_KEY]: JSON.stringify(linkyConfig) }).then(
@@ -20,20 +47,28 @@ function saveSettings(configJson) {
   );
 }
 
+browser.storage.local.get(LINKY_ADD_ON_CONFIG_STORAGE_KEY).then((data) => {
+  if (Object.keys(data).length !== 0) {
+    linkyConfig = JSON.parse(data[`${LINKY_ADD_ON_CONFIG_STORAGE_KEY}`]);
+    const delaySettings = JSON.parse(data[`${LINKY_ADD_ON_CONFIG_STORAGE_KEY}`]).settings.containerTabsOpeningControl;
+    const shortcutsSettings = JSON.parse(data[`${LINKY_ADD_ON_CONFIG_STORAGE_KEY}`]).settings.shortcuts;
+    loadDefaultConfigToOptionsPage(shortcutsSettings, delaySettings);
+    saveSettings(JSON.parse(data[`${LINKY_ADD_ON_CONFIG_STORAGE_KEY}`]));
+  } else {
+    browser.storage.local.set({ [LINKY_ADD_ON_CONFIG_STORAGE_KEY]: JSON.stringify(DEFAULT_CONFIG) }).then(() => {
+      linkyConfig = DEFAULT_CONFIG;
+      const delaySettings = linkyConfig.settings.containerTabsOpeningControl;
+      const shortcutsSettings = linkyConfig.settings.shortcuts;
+      loadDefaultConfigToOptionsPage(shortcutsSettings, delaySettings);
+      saveSettings(linkyConfig);
+    });
+  }
+}).catch((error) => console.error(error));
+
 document.querySelectorAll('[data-locale]').forEach((elem) => {
   const i18nElement = elem;
   i18nElement.innerText = browser.i18n.getMessage(i18nElement.dataset.locale);
 });
-
-const sidebarMenuTabs = document.querySelectorAll('input[name="tab-group-1"]');
-const optionsTitle = document.getElementById('options-title');
-const shortcutClearBtnArray = document.querySelectorAll('.clear-button');
-const shortcutResetBtnArray = document.querySelectorAll('.reset-button');
-const inputsShortcutsArr = document.querySelectorAll('.shortcuts-input');
-const inputsDelaySettingsArr = document.querySelectorAll('.delay-settings-input');
-const numberContainersInGroupInput = document.getElementById('numberOfContainersInGroup');
-const intervalBetweenContainersInput = document.getElementById('containersInGroupOpeningInterval');
-const intervalBetweenGroupsInput = document.getElementById('groupsOpeningInterval');
 
 function updateBrowserCommands(event, value) {
   browser.commands.update({ name: event, shortcut: value });
@@ -223,39 +258,3 @@ inputsDelaySettingsArr.forEach((item) => {
   item.addEventListener('blur', handleChangesDelaysOptions);
   item.addEventListener('change', handleChangesDelaysOptions);
 });
-
-function loadDefaultConfigToOptionsPage(shortcutsSettings, delaySettings) {
-  numberContainersInGroupInput.value = delaySettings.numberOfContainersInGroup;
-  intervalBetweenContainersInput.value = delaySettings.containersInGroupOpeningInterval;
-  intervalBetweenGroupsInput.value = delaySettings.groupsOpeningInterval;
-  if (shortcutsSettings.length) {
-    inputsShortcutsArr.forEach((item) => {
-      const getShortcutElement = shortcutsSettings.find((el) => el.id === item.id);
-      item.value = getShortcutElement.shortcut;
-      browser.commands.update({
-        name: item.id,
-        shortcut: getShortcutElement.shortcut,
-      });
-    });
-  } else {
-    console.error(browser.i18n.getMessage('errorMessageEmptyShortcutsSettings'));
-  }
-}
-
-browser.storage.local.get(LINKY_ADD_ON_CONFIG_STORAGE_KEY).then((data) => {
-  if (Object.keys(data).length !== 0) {
-    linkyConfig = JSON.parse(data[`${LINKY_ADD_ON_CONFIG_STORAGE_KEY}`]);
-    const delaySettings = JSON.parse(data[`${LINKY_ADD_ON_CONFIG_STORAGE_KEY}`]).settings.containerTabsOpeningControl;
-    const shortcutsSettings = JSON.parse(data[`${LINKY_ADD_ON_CONFIG_STORAGE_KEY}`]).settings.shortcuts;
-    loadDefaultConfigToOptionsPage(shortcutsSettings, delaySettings);
-    saveSettings(JSON.parse(data[`${LINKY_ADD_ON_CONFIG_STORAGE_KEY}`]));
-  } else {
-    browser.storage.local.set({ [LINKY_ADD_ON_CONFIG_STORAGE_KEY]: JSON.stringify(DEFAULT_CONFIG) }).then(() => {
-      linkyConfig = DEFAULT_CONFIG;
-      const delaySettings = linkyConfig.settings.containerTabsOpeningControl;
-      const shortcutsSettings = linkyConfig.settings.shortcuts;
-      loadDefaultConfigToOptionsPage(shortcutsSettings, delaySettings);
-      saveSettings(linkyConfig);
-    });
-  }
-}).catch((error) => console.error(error));
