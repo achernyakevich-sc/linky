@@ -82,5 +82,9 @@
     "invalidAlreadyReserved": {
         "message": "The combination has already reserved",
         "description": "Error message that displays if you try to insert the short cuts combination that has already reserved"
+    },
+    "responseMessageFromBackgroundScript": {
+        "message": "Response from background script",
+        "description": "Response message that displays in browser console when open options page"
     }
 }

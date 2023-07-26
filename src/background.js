@@ -10,8 +10,8 @@ var DEFAULT_CONFIG = {
     ],
     "containerTabsOpeningControl": {
       "numberOfContainersInGroup": 3,
-      "containersInGroupOpeningInterval": 1000,
-      "groupsOpeningInterval": 500,
+      "containersInGroupOpeningInterval": 500,
+      "groupsOpeningInterval": 2000,
     },
   },
 };
@@ -30,28 +30,23 @@ browser.storage.local.get(LINKY_ADD_ON_CONFIG_STORAGE_KEY).then((data) => {
   }
 }).catch((error) => console.error(error));
 
-/*
-Open current tab in available Containers.
-*/
 async function openCurrentTabInAvailableContainers(tab) {
   const containers = (await browser.contextualIdentities.query({})).filter((container) => container.cookieStoreId !== tab.cookieStoreId);
   const numberContainersInGroup = linkyConfig.settings.containerTabsOpeningControl.numberOfContainersInGroup;
   let totalDelay = 0;
 
   containers.forEach((container, index) => {
-    const isNewGroup = (index !== 0 && (index + 1) % numberContainersInGroup === 0);
-    if (isNewGroup) {
-      totalDelay += linkyConfig.settings.containerTabsOpeningControl.groupsOpeningInterval;
-    }
-
     setTimeout(() => {
       browser.tabs.create({
         cookieStoreId: container.cookieStoreId,
         url: tab.url,
       });
     }, totalDelay);
-
-    totalDelay += linkyConfig.settings.containerTabsOpeningControl.containersInGroupOpeningInterval;
+    if ((index + 1) % numberContainersInGroup === 0) {
+      totalDelay += linkyConfig.settings.containerTabsOpeningControl.groupsOpeningInterval;
+    } else {
+      totalDelay += linkyConfig.settings.containerTabsOpeningControl.containersInGroupOpeningInterval;
+    }
   });
 }
 
@@ -82,7 +77,7 @@ browser.browserAction.onClicked.addListener((tab, OnClickData) => {
 
 function handleMessage(request, sender, sendResponse) {
   linkyConfig = request;
-  sendResponse({ response: 'Response from background script' });
+  sendResponse({ response: browser.i18n.getMessage('responseMessageFromBackgroundScript') });
 }
 
 browser.runtime.onMessage.addListener(handleMessage);
