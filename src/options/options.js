@@ -256,5 +256,7 @@ function handleChangesDelaysOptions(e) {
 // Add event listeners to each item using the same functions
 inputsDelaySettingsArr.forEach((item) => {
   item.addEventListener('blur', handleChangesDelaysOptions);
-  item.addEventListener('change', handleChangesDelaysOptions);
+  item.addEventListener('change', (el) => {
+    el.target.focus();
+  });
 });
