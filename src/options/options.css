@@ -182,7 +182,8 @@ a:hover {
   max-width: 85px;
 }
 
-.settings-form .error {
+.settings-form .error,
+.settings-form .warning {
   bottom: -16px;
 }
 
@@ -221,7 +222,8 @@ a:hover {
 }
 
 .keyboard-shortcut .error,
-.settings-form .error {
+.settings-form .error,
+.settings-form .warning {
     position: absolute;
     margin: 0;
     width: 100%;
@@ -229,6 +231,15 @@ a:hover {
     color: #ff4d4f;
     text-align: left;
     white-space: nowrap;
+}
+
+.settings-form .warning {
+  color: #fc9701;
+  display: none;
+}
+
+.warning.show {
+  display: block;
 }
 
 input[type="text"],

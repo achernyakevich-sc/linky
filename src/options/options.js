@@ -243,10 +243,12 @@ inputsShortcutsArr.forEach((item) => {
 
 function handleChangesDelaysOptions(e) {
   const itemId = e.target.id;
-  const errorElement = document.getElementById(`${itemId}_error`);
+  const warningElement = document.getElementById(`${itemId}_warning`);
+
   if (e.target.value === '') {
-    e.target.value = DEFAULT_CONFIG.settings.containerTabsOpeningControl[itemId];
-    errorElement.innerText = '';
+    warningElement.classList.add('show');
+    e.target.value = e.target.getAttribute('data-previous-value');
+    setTimeout(() => { warningElement.classList.remove('show'); }, 2000);
   } else {
     linkyConfig.settings.containerTabsOpeningControl[itemId] = Number(e.target.value);
     saveSettings(linkyConfig);
@@ -258,5 +260,8 @@ inputsDelaySettingsArr.forEach((item) => {
   item.addEventListener('blur', handleChangesDelaysOptions);
   item.addEventListener('change', (el) => {
     el.target.focus();
+  });
+  item.addEventListener('focus', (el) => {
+    el.target.setAttribute('data-previous-value', el.target.value);
   });
 });

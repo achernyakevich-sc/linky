@@ -90,5 +90,9 @@
     "errorMessageEmptyShortcutsSettings": {
         "message": "Shortcuts settings are empty",
         "description": "Log an error if shortcuts settings are empty"
+    },
+    "warningMessageIncorrectDelayValue": {
+        "message": "Invalid data, was set previous value",
+        "description": "Warning message that displays for 2 second if user try to set incorrect value for delays options"
     }
 }
