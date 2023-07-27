@@ -31,12 +31,23 @@ function loadDefaultConfigToOptionsPage(shortcutsSettings, delaySettings) {
   }
 }
 
+// Send a message to background.js requesting the value of updateLinkyConfig
+browser.runtime.sendMessage({ type: 'get_var', name: 'updateLinkyConfig' }).then((message) => {
+// Update linkyConfig variable and use it for options page
+  linkyConfig = message.response;
+  const delaySettings = linkyConfig.settings.containerTabsOpeningControl;
+  const shortcutsSettings = linkyConfig.settings.shortcuts;
+  loadDefaultConfigToOptionsPage(shortcutsSettings, delaySettings);
+}, (error) => {
+  console.error(error);
+});
+
 function saveSettings(configJson) {
   browser.storage.local.set({ [LINKY_ADD_ON_CONFIG_STORAGE_KEY]: JSON.stringify(linkyConfig) }).then(
     () => {
       linkyConfig = configJson;
-      browser.runtime.sendMessage(configJson).then((message) => {
-        console.log(message.response);
+      browser.runtime.sendMessage({ type: 'set_var', name: 'updateLinkyConfig', value: linkyConfig }).then((response) => {
+        console.log(response.status);
       }, (error) => {
         console.error(error);
       });
@@ -46,24 +57,6 @@ function saveSettings(configJson) {
     },
   );
 }
-
-browser.storage.local.get(LINKY_ADD_ON_CONFIG_STORAGE_KEY).then((data) => {
-  if (Object.keys(data).length !== 0) {
-    linkyConfig = JSON.parse(data[`${LINKY_ADD_ON_CONFIG_STORAGE_KEY}`]);
-    const delaySettings = JSON.parse(data[`${LINKY_ADD_ON_CONFIG_STORAGE_KEY}`]).settings.containerTabsOpeningControl;
-    const shortcutsSettings = JSON.parse(data[`${LINKY_ADD_ON_CONFIG_STORAGE_KEY}`]).settings.shortcuts;
-    loadDefaultConfigToOptionsPage(shortcutsSettings, delaySettings);
-    saveSettings(JSON.parse(data[`${LINKY_ADD_ON_CONFIG_STORAGE_KEY}`]));
-  } else {
-    browser.storage.local.set({ [LINKY_ADD_ON_CONFIG_STORAGE_KEY]: JSON.stringify(DEFAULT_CONFIG) }).then(() => {
-      linkyConfig = DEFAULT_CONFIG;
-      const delaySettings = linkyConfig.settings.containerTabsOpeningControl;
-      const shortcutsSettings = linkyConfig.settings.shortcuts;
-      loadDefaultConfigToOptionsPage(shortcutsSettings, delaySettings);
-      saveSettings(linkyConfig);
-    });
-  }
-}).catch((error) => console.error(error));
 
 document.querySelectorAll('[data-locale]').forEach((elem) => {
   const i18nElement = elem;

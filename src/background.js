@@ -75,9 +75,15 @@ browser.browserAction.onClicked.addListener((tab, OnClickData) => {
   openCurrentTabInAvailableContainers(tab);
 });
 
-function handleMessage(request, sender, sendResponse) {
-  linkyConfig = request;
-  sendResponse({ response: browser.i18n.getMessage('responseMessageFromBackgroundScript') });
-}
-
-browser.runtime.onMessage.addListener(handleMessage);
+// Listen for messages from option.js
+browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.type === 'get_var' && request.name === 'updateLinkyConfig') {
+    sendResponse({ response: linkyConfig });
+  }
+  if (request.type === 'set_var' && request.name === 'updateLinkyConfig') {
+    // Update the value of linkyConfig
+    linkyConfig = request.value;
+    // Send back a confirmation status
+    sendResponse({ status: 'linkyConfig variable was successfully updated' });
+  }
+});
