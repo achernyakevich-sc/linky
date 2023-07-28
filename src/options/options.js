@@ -11,42 +11,28 @@ const numberContainersInGroupInput = document.getElementById('numberOfContainers
 const intervalBetweenContainersInput = document.getElementById('containersInGroupOpeningInterval');
 const intervalBetweenGroupsInput = document.getElementById('groupsOpeningInterval');
 
-let linkyConfig;
+let linkyConfig = bkg.linkyConfig;
 
-function loadDefaultConfigToOptionsPage(shortcutsSettings, delaySettings) {
-  numberContainersInGroupInput.value = delaySettings.numberOfContainersInGroup;
-  intervalBetweenContainersInput.value = delaySettings.containersInGroupOpeningInterval;
-  intervalBetweenGroupsInput.value = delaySettings.groupsOpeningInterval;
-  if (shortcutsSettings.length) {
-    inputsShortcutsArr.forEach((item) => {
-      const getShortcutElement = shortcutsSettings.find((el) => el.id === item.id);
-      item.value = getShortcutElement.shortcut;
-      browser.commands.update({
-        name: item.id,
-        shortcut: getShortcutElement.shortcut,
-      });
+// Setting configuration values on options page
+numberContainersInGroupInput.value = linkyConfig.settings.containerTabsOpeningControl.numberOfContainersInGroup;
+intervalBetweenContainersInput.value = linkyConfig.settings.containerTabsOpeningControl.containersInGroupOpeningInterval;
+intervalBetweenGroupsInput.value = linkyConfig.settings.containerTabsOpeningControl.groupsOpeningInterval;
+if (linkyConfig.settings.shortcuts.length) {
+  inputsShortcutsArr.forEach((item) => {
+    const getShortcutElement = linkyConfig.settings.shortcuts.find((el) => el.id === item.id);
+    item.value = getShortcutElement.shortcut;
+    browser.commands.update({
+      name: item.id,
+      shortcut: getShortcutElement.shortcut,
     });
-  } else {
-    console.error('Shortcuts settings are empty');
-  }
+  });
 }
-
-// Send a message to background.js requesting the value of updateLinkyConfig
-browser.runtime.sendMessage({ type: 'get_var', name: 'updateLinkyConfig' }).then((message) => {
-// Update linkyConfig variable and use it for options page
-  linkyConfig = message.response;
-  const delaySettings = linkyConfig.settings.containerTabsOpeningControl;
-  const shortcutsSettings = linkyConfig.settings.shortcuts;
-  loadDefaultConfigToOptionsPage(shortcutsSettings, delaySettings);
-}, (error) => {
-  console.error(error);
-});
 
 function saveSettings(configJson) {
   browser.storage.local.set({ [LINKY_ADD_ON_CONFIG_STORAGE_KEY]: JSON.stringify(linkyConfig) }).then(
     () => {
       linkyConfig = configJson;
-      browser.runtime.sendMessage({ type: 'set_var', name: 'updateLinkyConfig', value: linkyConfig }).then((response) => {
+      browser.runtime.sendMessage({ name: 'linkyConfig', data: linkyConfig }).then((response) => {
         console.log(response.status);
       }, (error) => {
         console.error(error);
@@ -241,7 +227,7 @@ function handleChangesDelaysOptions(e) {
   if (e.target.value === '') {
     warningElement.classList.add('show');
     e.target.value = e.target.getAttribute('data-previous-value');
-    setTimeout(() => { warningElement.classList.remove('show'); }, 2000);
+    setTimeout(() => { warningElement.classList.remove('show'); }, 3000);
   } else {
     linkyConfig.settings.containerTabsOpeningControl[itemId] = Number(e.target.value);
     saveSettings(linkyConfig);

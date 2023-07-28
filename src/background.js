@@ -17,7 +17,7 @@ var DEFAULT_CONFIG = {
 };
 var LINKY_ADD_ON_CONFIG_STORAGE_KEY = 'LINKY_ADD_ON_CONFIG';
 
-let linkyConfig;
+var linkyConfig;
 
 // Set config values to storage when open add-on first time
 browser.storage.local.get(LINKY_ADD_ON_CONFIG_STORAGE_KEY).then((data) => {
@@ -77,13 +77,10 @@ browser.browserAction.onClicked.addListener((tab, OnClickData) => {
 
 // Listen for messages from option.js
 browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.type === 'get_var' && request.name === 'updateLinkyConfig') {
-    sendResponse({ response: linkyConfig });
-  }
-  if (request.type === 'set_var' && request.name === 'updateLinkyConfig') {
+  if (request.name === 'linkyConfig') {
     // Update the value of linkyConfig
-    linkyConfig = request.value;
-    // Send back a confirmation status
-    sendResponse({ status: 'linkyConfig variable was successfully updated' });
+    linkyConfig = request.data;
+    // Send back a response and confirmation status
+    sendResponse({ response: linkyConfig, status: 'OK' });
   }
 });
