@@ -27,7 +27,7 @@ function loadDefaultConfigToOptionsPage(shortcutsSettings, delaySettings) {
       });
     });
   } else {
-    console.error(browser.i18n.getMessage('errorMessageEmptyShortcutsSettings'));
+    console.error('Shortcuts settings are empty');
   }
 }
 

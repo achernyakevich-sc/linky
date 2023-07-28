@@ -83,16 +83,8 @@
         "message": "The combination has already reserved",
         "description": "Error message that displays if you try to insert the short cuts combination that has already reserved"
     },
-    "responseMessageFromBackgroundScript": {
-        "message": "Response from background script",
-        "description": "Response message, that displays in browser console in the success result of updating settings on options page"
-    },
-    "errorMessageEmptyShortcutsSettings": {
-        "message": "Shortcuts settings are empty",
-        "description": "Log an error if shortcuts settings are empty"
-    },
     "warningMessageIncorrectDelayValue": {
-        "message": "Invalid data, was set previous value",
+        "message": "Data is invalid, value was returned to previous value",
         "description": "Warning message that displays for 2 second if user try to set incorrect value for delays options"
     }
 }
