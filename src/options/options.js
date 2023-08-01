@@ -1,6 +1,7 @@
 let bkg = browser.extension.getBackgroundPage();
 const LINKY_ADD_ON_CONFIG_STORAGE_KEY = bkg.LINKY_ADD_ON_CONFIG_STORAGE_KEY;
 const DEFAULT_CONFIG = bkg.DEFAULT_CONFIG;
+
 const sidebarMenuTabs = document.querySelectorAll('input[name="tab-group-1"]');
 const optionsTitle = document.getElementById('options-title');
 const shortcutClearBtnArray = document.querySelectorAll('.clear-button');
