@@ -18,6 +18,7 @@ let linkyConfig = bkg.linkyConfig;
 numberContainersInGroupInput.value = linkyConfig.settings.containerTabsOpeningControl.numberOfContainersInGroup;
 intervalBetweenContainersInput.value = linkyConfig.settings.containerTabsOpeningControl.containersInGroupOpeningInterval;
 intervalBetweenGroupsInput.value = linkyConfig.settings.containerTabsOpeningControl.groupsOpeningInterval;
+
 if (linkyConfig.settings.shortcuts.length) {
   inputsShortcutsArr.forEach((item) => {
     const getShortcutElement = linkyConfig.settings.shortcuts.find((el) => el.id === item.id);
@@ -62,6 +63,13 @@ sidebarMenuTabs.forEach((item) => {
   });
 });
 
+function updateShortcut(targetId, shortcutValue) {
+  let elem = linkyConfig.settings.shortcuts.find((el) => el.id === targetId.replace('_clear_btn', '').replace('_reset_btn', ''));
+  if (elem) {
+    elem.shortcut = shortcutValue;
+  }
+}
+
 // Clear button handler
 shortcutClearBtnArray.forEach((item) => {
   const currentId = item.id.replace('_clear_btn', '');
@@ -71,9 +79,7 @@ shortcutClearBtnArray.forEach((item) => {
     currentInput.value = '';
     currentError.innerText = '';
     updateBrowserCommands(currentId, '');
-    linkyConfig.settings.shortcuts
-      .filter((el) => el.id === e.target.id.replace('_clear_btn', ''))
-      .forEach((elem) => (elem.shortcut = ''));
+    updateShortcut(e.target.id, '');
     saveSettings(linkyConfig);
   });
 });
@@ -88,11 +94,7 @@ shortcutResetBtnArray.forEach((item) => {
     currentInput.value = getDefaultShortCutsById.shortcut;
     currentError.innerText = '';
     updateBrowserCommands(currentId, currentInput.value);
-    linkyConfig.settings.shortcuts
-      .filter((el) => el.id === e.target.id.replace('_reset_btn', ''))
-      .forEach((elem) => {
-        elem.shortcut = getDefaultShortCutsById.shortcut;
-      });
+    updateShortcut(e.target.id, getDefaultShortCutsById.shortcut);
     saveSettings(linkyConfig);
   });
 });
