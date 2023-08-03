@@ -209,9 +209,7 @@ function handleKeyDown(e) {
   const isValidShortcut = errorElement.innerText === '';
   if (isValidShortcut) {
     updateBrowserCommands(e.target.id, value);
-    linkyConfig.settings.shortcuts
-      .filter((el) => el.id === e.target.id)
-      .forEach((elem) => (elem.shortcut = e.target.value));
+    updateShortcut(e.target.id, e.target.value);
     saveSettings(linkyConfig);
   }
 }
