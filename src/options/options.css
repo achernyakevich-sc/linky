@@ -143,13 +143,15 @@ a:hover {
     color: #0c0c0d;
 }
 
-.option-container .caption {
+.option-container .caption,
+.settings-container .caption {
     font-size: 13px;
     font-weight: 400;
     margin: 0;
 }
 
-.option-container .option-element {
+.option-container .option-element,
+.settings-container .settings-element {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -161,24 +163,56 @@ a:hover {
     flex: 1;
 }
 
+.child-elements {
+  padding-left: 0;
+}
+
+/* Settings content */
+.settings-container .settings-element {
+  justify-content: flex-start;
+  padding: 0;
+  align-items: baseline;
+}
+
+.settings-form {
+  margin: 0 10px;
+}
+
+.settings-container input {
+  max-width: 85px;
+}
+
+.settings-form .error,
+.settings-form .warning {
+  bottom: -16px;
+}
+
+.settings-container .caption {
+  margin-bottom: 25px;
+}
+
 /* Shortcuts content */
 
-.option-container .child-elements {
+.option-container .child-elements,
+.settings-container .child-elements {
     padding-left: 0;
 }
 
-.option-container .option-element .option-form {
+.option-container .option-element .option-form,
+.settings-container .settings-element .settings-form {
     display: flex;
     align-items: center;
     justify-content: flex-end;
     margin-inline-start: 10px;
 }
 
-.option-container {
+.option-container,
+.settings-container {
     list-style-type: none;
 }
 
-.keyboard-shortcut {
+.keyboard-shortcut,
+.settings-form {
     position: relative;
 }
 
@@ -187,7 +221,9 @@ a:hover {
     align-items: center;
 }
 
-.keyboard-shortcut .error {
+.keyboard-shortcut .error,
+.settings-form .error,
+.settings-form .warning {
     position: absolute;
     margin: 0;
     width: 100%;
@@ -197,7 +233,17 @@ a:hover {
     white-space: nowrap;
 }
 
-input[type="text"] {
+.settings-form .warning {
+  color: #fc9701;
+  display: none;
+}
+
+.warning.show {
+  display: block;
+}
+
+input[type="text"],
+input[type="number"] {
     width: 200px;
     height: 30px;
     padding-inline-start: 5px;

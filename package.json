@@ -1,6 +1,6 @@
 {
   "name": "linky",
-  "version": "0.1",
+  "version": "0.2-SNAPSHOT",
   "description": "Linky - Firefox add-on that simplifies browsing performing redundant tasks in multiple containers",
   "main": "src/background.js",
   "scripts": {
@@ -12,8 +12,8 @@
   "license": "GNU v2.0",
   "devDependencies": {
     "eslint": "8.22.0",
-    "prettier": "2.8.7",
-    "eslint-config-airbnb-base": "^15.0.0"
+    "eslint-config-airbnb-base": "^15.0.0",
+    "prettier": "2.8.7"
   },
   "dependencies": {
     "web-ext": "^7.6.1"
