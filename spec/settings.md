@@ -22,4 +22,4 @@ Below there is Linky add-on's settings JSON structure and default values.
 }
 ```
 
-Settings JSON stored in local data storage under key `linky-settings`.
+Settings JSON stored in local data storage under key `LINKY_ADD_ON_CONFIG`.
