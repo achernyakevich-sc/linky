@@ -1,3 +1,11 @@
+0.3-SNAPSHOT (future)
+
+=========================
+
+- Opening of Containers Group presets.
+- Opening in searched and selected Containers.
+
+
 0.2 (2023-08-04)
 
 =========================

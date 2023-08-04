@@ -4,7 +4,7 @@ Below there is Linky add-on's settings JSON structure and default values.
 
 ```json
 {
-  "version": "0.2",
+  "version": "0.3-SNAPSHOT",
   "updatedOn": "Tue Jul 11 2023 19:52:49 GMT+0300 (Moscow Standard Time)",
   "settings": {
     "shortcuts": [
